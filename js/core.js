@@ -131,9 +131,6 @@ function getInfo(code,password){
 		})).then(function(response){
 			clearNotification();
 			id("btnSub").disabled=false;
-			if(!password){
-				id("inputCode").value="";
-			}
 			if(response.ok){
 				return response.text();
 			}else{
@@ -142,6 +139,7 @@ function getInfo(code,password){
 			}
 		}).then(function(data){
 			if(data===""){
+				id("inputCode").value="";
 				notify(multilang({
 					"en-US":"The file does not exist.",
 					"zh-CN":"文件不存在。",
@@ -169,6 +167,7 @@ function getInfo(code,password){
 						}
 						break;
 						case "passwordIncorrect":
+						id("inputRecvPsw").value="";
 						notify(multilang({
 							"en-US":"Incorrect password.",
 							"zh-CN":"密码错误。",
@@ -187,13 +186,6 @@ function getInfo(code,password){
 							"zh-CN":"请输入密码",
 							"zh-TW":"請輸入密碼"
 						});
-						id("inputRecvPsw").oninput=function(){
-							if(this.value){
-								this.type="password";
-							}else{
-								this.type="";
-							}
-						};
 						id("inputRecvPsw").onkeydown=function(event){
 							if(event.keyCode==13){
 								id("btnSubPsw").click();
@@ -206,7 +198,6 @@ function getInfo(code,password){
 						});
 						id("btnSubPsw").onclick=function(){
 							password=id("inputRecvPsw").value;
-							id("inputRecvPsw").type=id("inputRecvPsw").value="";
 							if(password){
 								getInfo(code,MD5(password));
 							}
