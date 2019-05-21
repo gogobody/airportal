@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w21a1";
+var version="19w21a2";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -108,7 +108,7 @@ function loadExpTime(){
 			"url":"privilege",
 			"username":login.username
 		})).then(function(response){
-			if(response.ok){
+			if(response.ok||response.status==200){
 				return response.text();
 			}
 		}).then(function(data){
@@ -464,7 +464,7 @@ function loggedIn(newLogin){
 					"text":"通过 "+pubPayMethod+" "+action+" "+pubPayPlan+" 的高级账号",
 					"ver":version
 				})).then(function(response){
-					if(response.ok){
+					if(response.ok||response.status==200){
 						payState="success";
 						id("btnDone3").innerText=multilang({
 							"en-US":"Close",
@@ -527,7 +527,7 @@ function loggedIn(newLogin){
 			"token":login.token,
 			"username":login.username
 		})).then(function(response){
-			if(response.ok){
+			if(response.ok||response.status==200){
 				return response.json();
 			}
 		}).then(function(data){
@@ -543,7 +543,7 @@ function loggedIn(newLogin){
 		"token":login.token,
 		"username":login.username
 	})).then(function(response){
-		if(response.ok){
+		if(response.ok||response.status==200){
 			return response.text();
 		}
 	}).then(function(data){

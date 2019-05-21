@@ -131,7 +131,7 @@ function getInfo(code,password){
 		})).then(function(response){
 			clearNotification();
 			id("btnSub").disabled=false;
-			if(response.ok){
+			if(response.ok||response.status==200){
 				return response.text();
 			}else{
 				invalidAttempt--;
@@ -311,7 +311,7 @@ function upload(up,files,settings){
 		"password":settings.password,
 		"username":login.username
 	})).then(function(response){
-		if(response.ok){
+		if(response.ok||response.status==200){
 			return response.json();
 		}else{
 			error(response);

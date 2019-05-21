@@ -125,7 +125,7 @@ function uploadSuccess(code){
 		'<p id="recvCode"></p>',
 		'<p id="whenReceving"></p>',
 		'<p id="otherWays">'+multilang({
-			"en-US":'You can also <a class="link1" id="copyLink">copy the download link</a> or <a class="link1" id="viewQRC">scan the QR code to download</a>.',
+			"en-US":'You can also<a class="link1" id="copyLink">copy the download link</a>or<a class="link1" id="viewQRC">scan the QR code to download</a>.',
 			"zh-CN":'您也可以<a class="link1" id="copyLink">复制下载链接</a>或<a class="link1" id="viewQRC">直接扫描二维码下载</a>。',
 			"zh-TW":'您也可以<a class="link1" id="copyLink">複製下載連結</a>或<a class="link1" id="viewQRC">直接掃描 QR 碼下載</a>。'
 		})+'</p>',
@@ -147,7 +147,8 @@ function uploadSuccess(code){
 		"zh-CN":"接收文件时，请输入该四位数密码。",
 		"zh-TW":"接收檔案時，請輸入該四位數密碼。"
 	});
-	btnDone0.innerText=multilang({
+	id("viewQRC").style.marginRight="0px";
+	id("btnDone0").innerText=multilang({
 		"en-US":"Done",
 		"zh-CN":"完成",
 		"zh-TW":"完成"
@@ -245,7 +246,7 @@ send.oncontextmenu=function(){
 				"username":login.username
 			})).then(function(response){
 				id("btnSendText").disabled=false;
-				if(response.ok){
+				if(response.ok||response.status==200){
 					return response.json();
 				}else{
 					error(response);
@@ -397,7 +398,7 @@ menuItemLogin.onclick=function(){
 					"token":true
 				})).then(function(response){
 					id("btnLogin").disabled=false;
-					if(response.ok){
+					if(response.ok||response.status==200){
 						return response.json();
 					}else{
 						error(response);
@@ -472,7 +473,7 @@ menuItemHistory.onclick=function(){
 			"token":login.token,
 			"username":login.username
 		})).then(function(response){
-			if(response.ok){
+			if(response.ok||response.status==200){
 				return response.json();
 			}else{
 				lblPlaceholder.innerText=multilang({
@@ -526,7 +527,7 @@ menuItemHistory.onclick=function(){
 									"code":code,
 									"username":login.username
 								})).then(function(response){
-									if(response.ok){
+									if(response.ok||response.status==200){
 										loadHistory();
 									}else{
 										error(response);
@@ -581,7 +582,7 @@ menuItemSettings.onclick=function(){
 				"username":login.username,
 				"value":this.checked.toString()
 			})).then(function(response){
-				if(response.ok){
+				if(response.ok||response.status==200){
 					notify(multilang({
 						"en-US":"Settings are saved.",
 						"zh-CN":"设置已保存。",
@@ -658,7 +659,7 @@ menuItemFeedback.onclick=function(){
 					"text":txtFeedback.value,
 					"ver":version
 				})).then(function(response){
-					if(response.ok){
+					if(response.ok||response.status==200){
 						alert(multilang({
 							"en-US":"Send successfully! We will process your feedback as soon as possible. Have a nice day :D",
 							"zh-CN":"发送成功！我们会尽快处理您的反馈。祝您有开心的一天 :D",
