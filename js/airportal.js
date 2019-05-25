@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w21b";
+var version="19w21b1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1331,8 +1331,7 @@ menuItemLogin.onclick=function(){
 				id("btnLogin").disabled=true;
 				fetch("https://api.rthe.cn/backend/userdata/verify?"+encodeData({
 					"email":email,
-					"password":password,
-					"token":true
+					"password":password
 				})).then(function(response){
 					id("btnLogin").disabled=false;
 					if(response.ok||response.status==200){
