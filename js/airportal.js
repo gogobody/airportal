@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w22a";
+var version="19w22a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1054,6 +1054,7 @@ function upload(up,files,config){
 	});
 }
 function uploadSuccess(code){
+	var url="https://airportal.cn/?code="+code;
 	document.title="[取件码 "+code+"] "+title;
 	showPopup([
 		'<p id="sentSuccessfully" class="p1"></p>',
@@ -1090,7 +1091,6 @@ function uploadSuccess(code){
 		"zh-TW":"完成"
 	});
 	copyLink.onclick=function(){
-		var url="https://airportal.cn/?code="+id("recvCode").innerText;
 		if("clipboard" in navigator){
 			navigator.clipboard.writeText(url).then(function(){
 				notify(multilang({
@@ -1113,7 +1113,7 @@ function uploadSuccess(code){
 			'<span class="btnBack" id="btnBack0"></span>'
 		],"sendBox2","popSend","slideInFromRight");
 		var qrcode=new Image(200,200);
-		qrcode.src=getQRCode("http://ap.rthe.cn/?code="+code);
+		qrcode.src=getQRCode(url);
 		id("QRBox").appendChild(qrcode);
 		id("btnBack0").onclick=function(){
 			closePopup("sendBox2","slideOut");
@@ -1816,7 +1816,13 @@ if(isiOS){
 		});
 	},100);
 }
-if(parseInt($_GET["code"])&&$_GET["code"].length==4){
+if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
+	var requireBrowser=function(){
+		alert("请在浏览器中打开此页面。");
+	};
+	receive.onclick=requireBrowser;
+	requireBrowser();
+}else if(parseInt($_GET["code"])&&$_GET["code"].length==4){
 	localStorage.setItem("code",$_GET["code"]);
 	location.search="";
 }else if(tmpCode){
