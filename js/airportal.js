@@ -1,10 +1,21 @@
 "use strict";
 var appName="AirPortal";
-var version="19w21b1";
+var version="19w22a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
 
+var $_GET=(function(){
+	var json={};
+	if(location.search){
+		var parameters=location.search.replace("?","").split("&");
+		for(var i=0;i<parameters.length;i++){
+			var split=parameters[i].split("=");
+			json[split[0]]=decodeURIComponent(split[1]);
+		}
+	}
+	return json;
+})()
 var chunk,currentExpTime,fileBackend,fileCount,fileDone,option,randomKey,signature,uploadCode;
 var chunkSize=100*1048576;
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
@@ -1079,7 +1090,7 @@ function uploadSuccess(code){
 		"zh-TW":"完成"
 	});
 	copyLink.onclick=function(){
-		var url="https://airportal.cn/"+id("recvCode").innerText;
+		var url="https://airportal.cn/?code="+id("recvCode").innerText;
 		if("clipboard" in navigator){
 			navigator.clipboard.writeText(url).then(function(){
 				notify(multilang({
@@ -1102,7 +1113,7 @@ function uploadSuccess(code){
 			'<span class="btnBack" id="btnBack0"></span>'
 		],"sendBox2","popSend","slideInFromRight");
 		var qrcode=new Image(200,200);
-		qrcode.src=getQRCode("http://airportal.cn/"+code);
+		qrcode.src=getQRCode("http://ap.rthe.cn/?code="+code);
 		id("QRBox").appendChild(qrcode);
 		id("btnBack0").onclick=function(){
 			closePopup("sendBox2","slideOut");
@@ -1805,7 +1816,10 @@ if(isiOS){
 		});
 	},100);
 }
-if(tmpCode){
+if(parseInt($_GET["code"])&&$_GET["code"].length==4){
+	localStorage.setItem("code",$_GET["code"]);
+	location.search="";
+}else if(tmpCode){
 	localStorage.removeItem("code");
 	if(parseInt(tmpCode)){
 		receive.click();
