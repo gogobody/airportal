@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w22a2";
+var version="19w23a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -545,7 +545,7 @@ function loggedIn(newLogin){
 	newItem.classList.add("menuItem");
 	newItem.onclick=function(){
 		showPopup([
-			'<span class="btnClose" id="btnClose0"></span>',
+			'<span class="btnClose" id="btnCloseAccount"></span>',
 			'<p class="p1" id="lblUsername"></p>',
 				'<span class="line"></span>',
 			'<p class="p3" id="lblExpTime"></p>',
@@ -583,7 +583,7 @@ function loggedIn(newLogin){
 			'</div>',
 			'<button class="btn1" id="btnPay0"></button>'
 		],"accBox0","popAccount");
-		id("btnClose0").onclick=function(){
+		id("btnCloseAccount").onclick=function(){
 			closePopup("popAccount");
 		};
 		id("lblUsername").innerText=login.email;
@@ -600,12 +600,12 @@ function loggedIn(newLogin){
 		});
 		id("showPrivilege").onclick=function(){
 			showPopup([
-				'<span class="btnBack" id="btnBack3"></span>',
+				'<span class="btnBack" id="btnBackPrivileges"></span>',
 				'<p id="titlePrivileges" class="p1"></p>',
 				'<span class="line"></span>',
 				'<p id="txtPrivileges" class="p3" style="margin-top: 100px;"></p>'
 			],"accBox_1","popAccount","slideInFromLeft");
-			id("btnBack3").onclick=function(){
+			id("btnBackPrivileges").onclick=function(){
 				closePopup("accBox_1","slideOut");
 			}
 			id("titlePrivileges").innerText=multilang({
@@ -688,10 +688,10 @@ function loggedIn(newLogin){
 			showPopup([
 				'<p class="p3" id="lblPayTip">您正在为此用户激活 / 续期高级账号</p>',
 				'<div id="payQRC"></div>',
-				'<span class="btnBack" id="btnBack2"></span>',
+				'<span class="btnBack" id="btnBackPay"></span>',
 				'<button class="btn1" id="btnPay1"></button>'
 			],"accBox1","popAccount","slideInFromRight");
-			id("btnBack2").onclick=function(){
+			id("btnBackPay").onclick=function(){
 				closePopup("accBox1","slideOut");
 			}
 			id("btnPay1").innerText=multilang({
@@ -1110,12 +1110,12 @@ function uploadSuccess(code){
 	viewQRC.onclick=function(){
 		showPopup([
 			'<div id="QRBox"></div>',
-			'<span class="btnBack" id="btnBack0"></span>'
+			'<span class="btnBack" id="btnBackQRC"></span>'
 		],"sendBox2","popSend","slideInFromRight");
 		var qrcode=new Image(200,200);
 		qrcode.src=getQRCode(url);
 		id("QRBox").appendChild(qrcode);
-		id("btnBack0").onclick=function(){
+		id("btnBackQRC").onclick=function(){
 			closePopup("sendBox2","slideOut");
 		};
 	};
@@ -1150,7 +1150,7 @@ function uploadSuccess(code){
 }
 send.oncontextmenu=function(){
 	showPopup([
-		'<span class="btnClose" id="btnClose4"></span>',
+		'<span class="btnClose" id="btnCloseSendText"></span>',
 		'<p id="titleSendText" class="p1"></p>',
 		'<textarea id="txtSend" placeholder=""></textarea>',
 		'<button class="btn1" id="btnSendText"></button>'
@@ -1170,7 +1170,7 @@ send.oncontextmenu=function(){
 		"zh-CN":"发送",
 		"zh-TW":"發送"
 	});
-	id("btnClose4").onclick=function(){
+	id("btnCloseSendText").onclick=function(){
 		closePopup("popSend");
 	};
 	id("btnSendText").onclick=function(){
@@ -1209,7 +1209,7 @@ receive.onclick=function(){
 		'</p>',
 		'<input type="tel" id="inputCode" class="inputCode" maxlength="4" autocomplete="off"><br>',
 		'<button class="btn1" id="btnSub"></button>',
-		'<span class="btnBack" id="btnBack1"></span>'
+		'<span class="btnBack" id="btnBackRecv"></span>'
 	],"recvBox0","popRecv");
 	id("enterCode").innerText=multilang({
 		"en-US":"Please enter the code",
@@ -1252,7 +1252,7 @@ receive.onclick=function(){
 			getInfo(id("inputCode").value);
 		}
 	};
-	id("btnBack1").onclick=function(){
+	id("btnBackRecv").onclick=function(){
 		closePopup("popRecv");
 	};
 	id("inputCode").focus();
@@ -1556,7 +1556,7 @@ menuItemSettings.onclick=function(){
 };
 menuItemFeedback.onclick=function(){
 	showPopup([
-		'<span class="btnClose" id="btnClose3"></span>',
+		'<span class="btnClose" id="btnCloseFeedback"></span>',
 		'<p id="titleFeedback" class="p1"></p>',
 		'<span class="line"></span>',
 		'<a id="faq" class="link1" href="https://rthe.cn/faq-ap" target="_blank"></a>&amp;<a id="qqGroup" class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank"></a>',
@@ -1630,7 +1630,7 @@ menuItemFeedback.onclick=function(){
 			}
 		}
 	};
-	id("btnClose3").onclick=function(){
+	id("btnCloseFeedback").onclick=function(){
 		closePopup("popFeedback");
 	};
 	hideMenu();

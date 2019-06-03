@@ -849,11 +849,9 @@ input[type="file"]{
 	#menuIcon {top: 20px;margin-left: -45px;}
 	.tick::before {top: 1px;}
 	.popUp {width: 80%;margin-left: -40%;}
-	#btnBack0 {left: 35px;}
-	#btnBack1 {top: -5px;left: 35px;}
-	#btnBack2,#btnBack3 {top: -10px;left: 30px;}
-	.btnClose {top: -5px;right: 30px;}
-	#btnClose3,#btnCloseLogin {top: 30px;}
+	.btnBack {top: -5px;left: 35px;}
+	.btnClose {top: -10px;right: 30px;}
+	#btnCloseFeedback,#btnCloseLogin {top: 30px;}
 	.p1 {font-size: 16px;}
 	.p3 {font-size: 12px;}
 	.input1 {left: 10%;width: 75%;}
