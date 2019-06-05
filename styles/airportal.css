@@ -431,23 +431,25 @@ a,button {outline: none;}
 	left: 0%;
 	overflow-y: scroll;
 	padding: 0px;
-	list-style: none;
 	text-align: left;
 }
-.fileList li {
+.fileList a {
+	color: black;
+	display: block;
 	padding: 10px 15px;
 	background-color: white;
+	text-decoration: none;
 	transition: all 0.25s;
 	cursor: pointer;
 }
-.fileList li:nth-child(2n+1){
+.fileList a:nth-child(2n+1){
 	background-color: rgba(0,0,0,0.03);
 }
-.fileList li:hover {
+.fileList a:hover {
 	/*background-color: rgba(0,0,0,0.1);*/
 	color: rgb(65,145,245);
 }
-.fileList li:active {
+.fileList a:active {
 	/*background-color: rgba(0,0,0,0.15);*/
 	color: #A5C220;
 }

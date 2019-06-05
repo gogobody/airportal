@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w23a";
+var version="19w23a2";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -350,7 +350,7 @@ function getInfo(code,password){
 					showPopup([
 						'<p id="multiFilesReceived" class="p1" style="margin-top: -10px;"></p>',
 						'<p id="multiFilesTip" style="margin-top: -10px;"></p>',
-						'<ul id="fileList" class="fileList"></ul>',
+						'<div id="fileList" class="fileList"></div>',
 						'<button class="btn1" id="btnDone1"></button>'
 					],"recvBox1","popRecv","slideInFromRight");
 					id("multiFilesReceived").innerText=multilang({
@@ -364,18 +364,21 @@ function getInfo(code,password){
 						"zh-TW":"單擊列表中的項目來分別下載它們"
 					});
 					for(var file=0;file<data.length;file++){
-						var newLi=document.createElement("li");
-						newLi.classList.add("menu");
-						newLi.innerText=decodeURIComponent(data[file].name);
-						newLi.setAttribute("code",data.code);
+						var newA=document.createElement("a");
+						newA.classList.add("menu");
+						newA.innerText=decodeURIComponent(data[file].name);
 						if(data.length>1){
-							newLi.setAttribute("index",file+1);
+							newA.setAttribute("index",file+1);
 						}
-						newLi.onclick=function(){
-							var index=this.getAttribute("index")-1;
-							downloadFile(data[index]);
-						};
-						id("fileList").appendChild(newLi);
+						if(data[file].download.length===1){
+							newA.href=data[file].download[0];
+						}else{
+							newA.onclick=function(){
+								var index=this.getAttribute("index")-1;
+								downloadFile(data[index]);
+							};
+						}
+						id("fileList").appendChild(newA);
 					}
 					id("btnDone1").innerText=multilang({
 						"en-US":"Close",
@@ -1672,7 +1675,7 @@ var uploader=new plupload.Uploader({
 				'<span class="btnClose" id="btnCloseUpload"></span>',
 				'<p id="filesSelected" class="p1" style="margin-top: -10px;"></p>',
 				'<p id="filesTip" style="margin-top: -10px;"></p>',
-				'<ul id="selectedFileList" class="fileList"></ul>',
+				'<div id="selectedFileList" class="fileList"></div>',
 				'<table class="tableUploadSettings">',
 					'<tbody>',
 						'<tr>',
@@ -1710,10 +1713,10 @@ var uploader=new plupload.Uploader({
 				"zh-TW":"未登入"
 			});
 			plupload.each(files,function(file){
-				var newLi=document.createElement("li");
-				newLi.classList.add("menu");
-				newLi.innerText=file.name;
-				id("selectedFileList").appendChild(newLi);
+				var newA=document.createElement("a");
+				newA.classList.add("menu");
+				newA.innerText=file.name;
+				id("selectedFileList").appendChild(newA);
 			});
 			id("lblFilePsw").innerText=multilang({
 				"en-US":"Password",
