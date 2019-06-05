@@ -1,4 +1,3 @@
-"use strict";
 var appName="AirPortal";
 var version="19w23a2";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";

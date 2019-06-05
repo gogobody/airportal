@@ -35,7 +35,7 @@ a,button {outline: none;}
 	margin-top: -200px;
 	background-repeat: no-repeat;
 	background-size: cover;
-	background-image: url("../images/mainLogo.png");
+	background-image: url("https://cdn.jsdelivr.net/gh/rthsoftware/airportal/images/mainLogo.png");
 }
 .mainBox {
 	position: absolute;
@@ -70,7 +70,7 @@ a,button {outline: none;}
 	color: rgb(65,145,245);
 	background-color: white;
 	/*background-position: 100%;
-	background-image: url("../images/themeColor.jpg");*/
+	background-image: url("https://cdn.jsdelivr.net/gh/rthsoftware/airportal/images/themeColor.jpg");*/
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 }
 #receive {
@@ -750,7 +750,7 @@ textarea:focus {
 	top: 30px;
 	background-repeat: no-repeat;
 	background-size: cover;
-	background-image: url("../images/loginLogo.png");
+	background-image: url("https://cdn.jsdelivr.net/gh/rthsoftware/airportal/images/loginLogo.png");
 }
 #popLogin input {
 	top: 0px;
@@ -810,14 +810,14 @@ textarea {
 	width: 16px !important; 
 	height: 16px !important;  
 	vertical-align: middle; 
-	background: url(../images/cboxOutline.png) no-repeat;
+	background: url(https://cdn.jsdelivr.net/gh/rthsoftware/airportal/images/cboxOutline.png) no-repeat;
 	background-size: contain;
 }
 .cbox:hover {
-	background-image: url(../images/cboxOutlineH.png);
+	background-image: url(https://cdn.jsdelivr.net/gh/rthsoftware/airportal/images/cboxOutlineH.png);
 }
 .cbox:checked {
-	background-image: url(../images/cboxChecked.png);
+	background-image: url(https://cdn.jsdelivr.net/gh/rthsoftware/airportal/images/cboxChecked.png);
 }
 .notificationBar {
 	position: fixed;
