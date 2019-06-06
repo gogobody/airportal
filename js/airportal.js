@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w23a3";
+var version="19w23a4";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -343,7 +343,7 @@ function getInfo(code,password){
 					id("btnDone4").onclick=function(){
 						closePopup("popRecv");
 					};
-				}else if(data.length==1){
+				}else if(data.length===1){
 					downloadFile(data[0]);
 				}else{
 					showPopup([
@@ -366,12 +366,10 @@ function getInfo(code,password){
 						var newA=document.createElement("a");
 						newA.classList.add("menu");
 						newA.innerText=decodeURIComponent(data[file].name);
-						if(data.length>1){
-							newA.setAttribute("index",file+1);
-						}
 						if(data[file].download.length===1){
 							newA.href=data[file].download[0];
 						}else{
+							newA.setAttribute("index",file+1);
 							newA.onclick=function(){
 								var index=this.getAttribute("index")-1;
 								downloadFile(data[index]);
