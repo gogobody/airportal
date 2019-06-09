@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w23a4";
+var version="19w24a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1766,7 +1766,7 @@ var uploader=new plupload.Uploader({
 					"en-US":"Almost there",
 					"zh-CN":"马上就好",
 					"zh-TW":"馬上就好"
-				});
+				})+" ("+(fileDone+1)+"/"+fileCount+")";
 			}else{
 				id("lblUploadP").innerText=multilang({
 					"en-US":"Uploading",
