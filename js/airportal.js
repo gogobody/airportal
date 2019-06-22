@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w25a";
+var version="19w25a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1232,7 +1232,9 @@ receive.onclick=function(){
 		"zh-TW":"確定"
 	});
 	id("btnSub").onclick=function(){
-		if(invalidAttempt>2){
+		if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
+			alert("请在浏览器中打开此页面。");
+		}else if(invalidAttempt>2){
 			var code=getRandCharacter(3);
 			var enteredCode=prompt(multilang({
 				"en-US":"You have entered invalid codes many times. Please enter the verification code to continue: ",
@@ -1816,13 +1818,7 @@ if(isiOS){
 		});
 	},100);
 }
-if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
-	var requireBrowser=function(){
-		alert("请在浏览器中打开此页面。");
-	};
-	receive.onclick=requireBrowser;
-	requireBrowser();
-}else if(parseInt($_GET["code"])&&$_GET["code"].length==4){
+if(parseInt($_GET["code"])&&$_GET["code"].length==4){
 	localStorage.setItem("code",$_GET["code"]);
 	location.search="";
 }else if(tmpCode){
