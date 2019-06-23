@@ -881,6 +881,7 @@ input[type="file"]{
 	.payPlans,#historyList,.line {width: 80%;left: 10%;}
 	.payPlans {height: 180px;overflow-y: scroll;}
 	.payItem {min-width: 70px;margin: 0px 2.5px 10px;}
+	#ad {display: none;}
 	.footer {font-size: 11px;}
 	#footerL {bottom: auto;top: 20px;}
 }
