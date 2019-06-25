@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w25b2";
+var version="19w26a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1031,11 +1031,11 @@ function upload(up,files,config){
 					"zh-TW":"正在上傳"
 				})+"] "+title;
 				showPopup([
-					'<p class="p1" id="lblUploadP" style="margin-top: 120px;"></p>',
+					'<p class="p1" id="lblUploadP"></p>',
 					'<span class="progressBar" id="progressBarBg0"></span>',
 					'<span class="progressBar" id="progressBar0"></span>'
 				],"sendBox0","popSend","slideInFromRight");
-				lblUploadP.innerText=multilang({
+				id("lblUploadP").innerText=multilang({
 					"en-US":"Uploading...",
 					"zh-CN":"正在上传……",
 					"zh-TW":"正在上傳……"
