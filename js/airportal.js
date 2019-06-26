@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w26a";
+var version="19w26a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1562,7 +1562,7 @@ menuItemFeedback.onclick=function(){
 		'<span class="btnClose" id="btnCloseFeedback"></span>',
 		'<p id="titleFeedback" class="p1"></p>',
 		'<span class="line"></span>',
-		'<a id="faq" class="link1" href="https://rthe.cn/faq-ap" target="_blank"></a>&amp;<a id="qqGroup" class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank"></a>',
+		'<a id="faq" class="link1" href="https://faq-ap.rthe.cn/" target="_blank"></a>&amp;<a id="qqGroup" class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank"></a>',
 		'<textarea id="txtFeedback"></textarea>',
 		'<button class="btn1" id="btnSendFeed"></button>'
 	],null,"popFeedback");
