@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w26a1";
+var version="19w26a2";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1279,7 +1279,7 @@ menuItemLogin.onclick=function(){
 	if(login.username){
 		var ssoIFrame=document.createElement("iframe");
 		ssoIFrame.style.display="none";
-		ssoIFrame.src="https://rthsoftware.cn/sso.html?"+encodeData({
+		ssoIFrame.src="https://account.rthsoftware.cn/sso.html?"+encodeData({
 			"action":"logout",
 			"token":login.token
 		});
@@ -1304,7 +1304,7 @@ menuItemLogin.onclick=function(){
 			"zh-CN":"使用热铁盒账号来登录到 AirPortal",
 			"zh-TW":"使用熱鐵盒賬號來登入到 AirPortal"
 		});
-		id("signUp").href="https://rthsoftware.cn/login.html?"+encodeData({
+		id("signUp").href="https://account.rthsoftware.cn/login.html?"+encodeData({
 			"continue":"https://airportal.cn/",
 			"page":"signup"
 		});
@@ -1368,7 +1368,7 @@ menuItemLogin.onclick=function(){
 								"zh-CN":"密码错误。您想重置密码吗？",
 								"zh-TW":"密碼錯誤。您想重設密碼嗎？"
 							}))){
-								location.href="https://rthsoftware.cn/login.html?"+encodeData({
+								location.href="https://account.rthsoftware.cn/login.html?"+encodeData({
 									"email":email,
 									"page":"resetpassword"
 								});
@@ -1660,7 +1660,7 @@ if(login.username){
 }else{
 	var ssoIFrame=document.createElement("iframe");
 	ssoIFrame.style.display="none";
-	ssoIFrame.src="https://rthsoftware.cn/sso.html";
+	ssoIFrame.src="https://account.rthsoftware.cn/sso.html";
 	document.body.appendChild(ssoIFrame);
 }
 var uploader=new plupload.Uploader({
