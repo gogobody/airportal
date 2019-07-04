@@ -839,11 +839,7 @@ textarea {
 	position: absolute;
 	left: 30px;
 	bottom: 70px;
-	width: 250px;
-	height: 100px;
 	box-shadow: rgba(65,145,245,0.2) 0px 5px 30px;
-	border-radius: 10px;
-	cursor: pointer;
 	background-size: contain;
 	background-position: center;
 	transition: all 0.25s;
