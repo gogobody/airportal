@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w28a3";
+var version="19w28a4";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -536,8 +536,9 @@ function loggedIn(newLogin){
 	var newItem=document.createElement("a");
 	newItem.classList.add("menuItem");
 	newItem.onclick=function(){
+		var btnCloseId="btnClose"+new Date().getTime();
 		showPopup([
-			'<span class="btnClose" id="btnClose"></span>',
+			'<span class="btnClose" id="'+btnCloseId+'"></span>',
 			'<p class="p1" id="lblUsername"></p>',
 				'<span class="line"></span>',
 			'<p class="p3" id="lblExpTime"></p>',
@@ -575,7 +576,7 @@ function loggedIn(newLogin){
 			'</div>',
 			'<button class="btn1" id="btnPay0"></button>'
 		],"accBox0","popAccount");
-		id("btnClose").onclick=function(){
+		id(btnCloseId).onclick=function(){
 			closePopup("popAccount");
 		};
 		id("lblUsername").innerText=login.email;
@@ -1138,8 +1139,9 @@ function uploadSuccess(code){
 	};
 }
 send.oncontextmenu=function(){
+	var btnCloseId="btnClose"+new Date().getTime();
 	showPopup([
-		'<span class="btnClose" id="btnClose"></span>',
+		'<span class="btnClose" id="'+btnCloseId+'"></span>',
 		'<p id="titleSendText" class="p1"></p>',
 		'<textarea id="txtSend" placeholder=""></textarea>',
 		'<button class="btn1" id="btnSendText"></button>'
@@ -1159,7 +1161,7 @@ send.oncontextmenu=function(){
 		"zh-CN":"发送",
 		"zh-TW":"發送"
 	});
-	id("btnClose").onclick=function(){
+	id(btnCloseId).onclick=function(){
 		closePopup("popSend");
 	};
 	id("btnSendText").onclick=function(){
@@ -1273,11 +1275,12 @@ menuItemLogin.onclick=function(){
 		});
 		document.body.appendChild(ssoIFrame);
 	}else{
+		var btnCloseId="btnClose"+new Date().getTime();
 		showPopup([
-			'<span class="btnClose" id="btnClose"></span>',
+			'<span class="btnClose" id="'+btnCloseId+'"></span>',
 			'<iframe src="https://account.rthsoftware.cn/login-airportal.html"></iframe>'
 		],null,"popLogin");
-		id("btnClose").onclick=function(){
+		id(btnCloseId).onclick=function(){
 			closePopup("popLogin");
 		};
 	}
@@ -1475,8 +1478,9 @@ menuItemSettings.onclick=function(){
 	hideMenu();
 };
 menuItemFeedback.onclick=function(){
+	var btnCloseId="btnClose"+new Date().getTime();
 	showPopup([
-		'<span class="btnClose" id="btnClose"></span>',
+		'<span class="btnClose" id="'+btnCloseId+'"></span>',
 		'<p id="titleFeedback" class="p1"></p>',
 		'<span class="line"></span>',
 		'<a id="faq" class="link1" href="https://faq-ap.rthe.cn/" target="_blank"></a>&amp;<a id="qqGroup" class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank"></a>',
@@ -1546,7 +1550,7 @@ menuItemFeedback.onclick=function(){
 			}
 		}
 	};
-	id("btnClose").onclick=function(){
+	id(btnCloseId).onclick=function(){
 		closePopup("popFeedback");
 	};
 	hideMenu();
@@ -1584,8 +1588,9 @@ var uploader=new plupload.Uploader({
 	"chunk_size":chunkSize,
 	"init":{
 		"FilesAdded":function(up,files){
+			var btnCloseId="btnClose"+new Date().getTime();
 			showPopup([
-				'<span class="btnClose" id="btnClose"></span>',
+				'<span class="btnClose" id="'+btnCloseId+'"></span>',
 				'<p id="filesSelected" class="p1" style="margin-top: -10px;"></p>',
 				'<p id="filesTip" style="margin-top: -10px;"></p>',
 				'<div id="selectedFileList" class="fileList"></div>',
@@ -1611,7 +1616,7 @@ var uploader=new plupload.Uploader({
 				'</table>',
 				'<button class="btn1" id="btnUpload"></button>'
 			],"uploadList","popSend","rebound");
-			id("btnClose").onclick=function(){
+			id(btnCloseId).onclick=function(){
 				uploader.splice();
 				closePopup("popSend");
 			};
