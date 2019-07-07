@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w28a5";
+var version="19w28a6";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1264,8 +1264,7 @@ menuItemLogin.onclick=function(){
 		var ssoIFrame=document.createElement("iframe");
 		ssoIFrame.style.display="none";
 		ssoIFrame.src="https://account.rthsoftware.cn/sso.html?"+encodeData({
-			"action":"logout",
-			"token":login.token
+			"action":"logout"
 		});
 		document.body.appendChild(ssoIFrame);
 	}else{

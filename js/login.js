@@ -42,7 +42,7 @@ btnLogin.onclick=function(){
 						"zh-CN":"密码错误。您想重置密码吗？",
 						"zh-TW":"密碼錯誤。您想重設密碼嗎？"
 					}))){
-						open("https://account.rthsoftware.cn/login.html?"+encodeData({
+						open("login.html?"+encodeData({
 							"email":email,
 							"page":"resetpassword"
 						}));
