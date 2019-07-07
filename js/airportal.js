@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w28a4";
+var version="19w28a5";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1024,13 +1024,7 @@ function upload(up,files,config){
 					"zh-TW":"正在上傳……"
 				});
 				option={
-					"url":(function(){
-						if(location.protocol=="https:"){
-							return "https:";
-						}else{
-							return "http:";
-						}
-					})()+"//"+data.host,
+					"url":"https://"+data.host,
 					"multipart_params":{
 						"policy":data.policy,
 						"OSSAccessKeyId":data.accessid,
@@ -1407,18 +1401,11 @@ menuItemSettings.onclick=function(){
 				'<input type="checkbox" class="cbox" id="inputLoginRequired"></input>',
 				'<label id="lblLoginRequired" class="lblCbox" for="inputLoginRequired"></label>',
 			'</div>',
-			'<div>',
-				'<input type="checkbox" class="cbox" id="httpsEnabled"></input>',
-				'<label id="lblHttpsEnabled" class="lblCbox" for="httpsEnabled"></label>',
-			'</div>',
 		'</div>',
 		'<button class="btn1" id="btnDone5"></button>'
 	],null,"popSettings");
 	if(settings["loginRequired"]){
 		id("inputLoginRequired").checked=true;
-	}
-	if(location.protocol=="https:"){
-		id("httpsEnabled").checked=true;
 	}
 	id("titleSettings").innerText=multilang({
 		"en-US":"Settings",
@@ -1429,11 +1416,6 @@ menuItemSettings.onclick=function(){
 		"en-US":"Require my password when receiving my files",
 		"zh-CN":"接收我的文件时需要登录我的账号",
 		"zh-TW":"接收我的檔案時需要登入我的賬號"
-	});
-	id("lblHttpsEnabled").innerText=multilang({
-		"en-US":"Transfer files over HTTPS",
-		"zh-CN":"使用 HTTPS 协议传输文件",
-		"zh-TW":"使用 HTTPS 協定傳輸檔案"
 	});
 	id("inputLoginRequired").onchange=function(){
 		if(login.username){
@@ -1458,13 +1440,6 @@ menuItemSettings.onclick=function(){
 		}else{
 			this.checked=false;
 			menuItemLogin.click();
-		}
-	};
-	id("httpsEnabled").onchange=function(){
-		if(this.checked){
-			location.href="https://airportal.cn/";
-		}else{
-			location.href="http://ap.rthe.cn/";
 		}
 	};
 	id("btnDone5").innerText=multilang({
@@ -1779,9 +1754,6 @@ newScript.onload=function(){
 document.body.appendChild(newScript);
 if(chs){
 	txtVer.innerText="闽ICP备18016273号";
-	txtVer.onclick=function(){
-		open("http://www.miitbeian.gov.cn/");
-	};
 	txtVer.oncontextmenu=function(){
 		txtVer.innerText=version;
 		return false;

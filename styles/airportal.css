@@ -313,7 +313,7 @@ a,button {outline: none;}
 	pointer-events: none;
 }
 #btnDone5 {
-	top: 120px;
+	top: 160px;
 }
 #btnPay0 {
 	top: 20px;
@@ -744,9 +744,9 @@ textarea:focus {
 	background-color: rgba(65,145,245,0.5);
 }
 .contentLeftAligned {
-	margin: 30px auto;
+	margin: 20px auto;
 	text-align: left;
-	width: 80%;
+	width: max-content;
 }
 .footer {
 	position: absolute;

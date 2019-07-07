@@ -26,9 +26,12 @@ btnLogin.onclick=function(){
 		}).then(function(data){
 			if(data){
 				if(data.alert){
-					alert(data.alert)
+					alert(data.alert);
 				}else if(data.index){
 					if(data.token){
+						localStorage.setItem("Email",data.email);
+						localStorage.setItem("Token",data.token);
+						localStorage.setItem("Username",data.username);
 						parent.postMessage(btoa(JSON.stringify({
 							"email":data.email,
 							"token":data.token,
@@ -39,10 +42,10 @@ btnLogin.onclick=function(){
 						"zh-CN":"密码错误。您想重置密码吗？",
 						"zh-TW":"密碼錯誤。您想重設密碼嗎？"
 					}))){
-						location.href="https://account.rthsoftware.cn/login.html?"+encodeData({
+						open("https://account.rthsoftware.cn/login.html?"+encodeData({
 							"email":email,
 							"page":"resetpassword"
-						});
+						}));
 					}
 				}else{
 					alert(multilang({
