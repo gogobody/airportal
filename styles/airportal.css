@@ -239,6 +239,11 @@ a,button {outline: none;}
 	box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	transition: all 0.25s;
 }
+.popUp iframe{
+	border: none;
+	height: calc(100% - 40px);
+	width: 100%;
+}
 .p1 {
 	font-size: 18px;
 }
@@ -308,7 +313,7 @@ a,button {outline: none;}
 	pointer-events: none;
 }
 #btnDone5 {
-	top: 170px;
+	top: 120px;
 }
 #btnPay0 {
 	top: 20px;
@@ -316,7 +321,9 @@ a,button {outline: none;}
 	pointer-events: none;
 }
 #btnLogin {
-	top: 20px;
+	display: block;
+	margin: 20px auto 0;
+	position: static;
 }
 #btnSetPri {
 	top: 100px;
@@ -462,7 +469,7 @@ a,button {outline: none;}
 	margin-bottom: 15px;
 }
 .tableUploadSettings {
-	margin: 0px auto 15px;
+	margin: 0 auto 15px;
 	width: 85%;
 }
 .tableUploadSettings label{
@@ -583,7 +590,7 @@ a,button {outline: none;}
 .payPlans {
 	width: 70%;
 	width: max-content;
-	margin: 0px auto;
+	margin: 0 auto;
 	text-align: left;
 }
 #promotionText {
@@ -678,14 +685,12 @@ a,button {outline: none;}
 	margin-top: -10px;
 }
 .input1 {
-	position: relative;
-	left: 20%;
 	top: 45px;
 	display: block;
 	border: none;
 	width: 55%;
 	padding: 10px 2.5%;
-	margin-top: 15px;
+	margin: 15px auto;
 	text-align: center;
 	font-size: small;
 	color: rgba(0,0,0,0.8);
@@ -738,6 +743,11 @@ textarea:focus {
 .btnClose:active::before,.btnClose:active::after {
 	background-color: rgba(65,145,245,0.5);
 }
+.contentLeftAligned {
+	margin: 30px auto;
+	text-align: left;
+	width: 80%;
+}
 .footer {
 	position: absolute;
 	bottom: 18px;
@@ -745,23 +755,24 @@ textarea:focus {
 	line-height: 16px;
 	color: rgba(0,0,0,0.35);
 }
+.login {
+	background-color: transparent;
+	height: auto;
+	margin-top: 30px;
+}
+.login .p4{
+	margin-top: 20px;
+	text-align: center;
+}
 .loginLogo {
-	position: relative;
 	width: 250px;
 	height: 60px;
 	left: 50%;
-	margin-left: -125px;
+	margin: 0 auto;
 	top: 30px;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-image: url(https://cdn.jsdelivr.net/gh/rthsoftware/airportal/images/loginLogo.png);
-}
-#popLogin input {
-	top: 0px;
-}
-#popLogin .p4 {
-	text-align: center;
-	margin-top: 50px;
 }
 textarea {
 	position: relative;
@@ -869,7 +880,7 @@ input[type="file"]{
 	user-select: none;
 }
 
-@media screen and (max-width:500px){  
+@media screen and (max-width:500px){
 	.btnMain {font-size: small;}
 	#menuIcon {top: 20px;margin-left: -45px;}
 	.tick::before {top: 1px;}
@@ -879,7 +890,6 @@ input[type="file"]{
 	#btnCloseFeedback,#btnCloseLogin {top: 30px;}
 	.p1 {font-size: 16px;}
 	.p3 {font-size: 12px;}
-	.input1 {left: 10%;width: 75%;}
 	.contentBox1 {width: 80%; left: 10%;}
 	.fileList {margin: 20px; width: calc(100% - 40px);}
 	.payPlans,#historyList,.line {width: 80%;left: 10%;}
@@ -888,4 +898,7 @@ input[type="file"]{
 	#ad {display: none;}
 	.footer {font-size: 11px;}
 	#footerL {bottom: auto;top: 20px;}
+}
+@media screen and (max-width:400px){
+	.input1 {width: 75%;}
 }

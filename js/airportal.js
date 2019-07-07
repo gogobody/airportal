@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w27a1";
+var version="19w28a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -190,15 +190,6 @@ function downloadFile(fileInfo){
 	}else{
 		location.href=fileInfo.download[0];
 	}
-}
-function encodeData(data){
-	var array=[];
-	for(var key in data){
-		if(data[key]){
-			array.push(key+"="+encodeURIComponent(data[key]));
-		}
-	}
-	return array.join("&");
 }
 function error(e){
 	clearNotification();
@@ -422,7 +413,7 @@ function getRandCharacter(len){
 }
 function getRandStr(len){
 	len=len||32;
-	var chars="ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";   
+	var chars="ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
 	var maxPos=chars.length;
 	var pwd="";
 	for(var i=0;i<len;i++){
@@ -546,7 +537,7 @@ function loggedIn(newLogin){
 	newItem.classList.add("menuItem");
 	newItem.onclick=function(){
 		showPopup([
-			'<span class="btnClose" id="btnCloseAccount"></span>',
+			'<span class="btnClose" id="btnClose"></span>',
 			'<p class="p1" id="lblUsername"></p>',
 				'<span class="line"></span>',
 			'<p class="p3" id="lblExpTime"></p>',
@@ -584,7 +575,7 @@ function loggedIn(newLogin){
 			'</div>',
 			'<button class="btn1" id="btnPay0"></button>'
 		],"accBox0","popAccount");
-		id("btnCloseAccount").onclick=function(){
+		id("btnClose").onclick=function(){
 			closePopup("popAccount");
 		};
 		id("lblUsername").innerText=login.email;
@@ -604,7 +595,7 @@ function loggedIn(newLogin){
 				'<span class="btnBack" id="btnBackPrivileges"></span>',
 				'<p id="titlePrivileges" class="p1"></p>',
 				'<span class="line"></span>',
-				'<p id="txtPrivileges" class="p3" style="margin-top: 100px;"></p>'
+				'<p id="txtPrivileges" class="p3 contentLeftAligned"></p>'
 			],"accBox_1","popAccount","slideInFromLeft");
 			id("btnBackPrivileges").onclick=function(){
 				closePopup("accBox_1","slideOut");
@@ -881,15 +872,6 @@ function loggedIn(newLogin){
 		}
 	});
 }
-function multilang(json){
-	if(chs){
-		return json["zh-CN"];
-	}else if(zh){
-		return json["zh-TW"];
-	}else{
-		return json["en-US"];
-	}
-}
 function notify(content,duration){
 	var newDiv=document.createElement("div");
 	newDiv.classList.add("notificationBar");
@@ -1041,10 +1023,16 @@ function upload(up,files,config){
 					"zh-TW":"正在上傳……"
 				});
 				option={
-					"url":"https://"+data.host,
+					"url":(function(){
+						if(location.protocol=="https:"){
+							return "https:";
+						}else{
+							return "http:";
+						}
+					})()+"//"+data.host,
 					"multipart_params":{
 						"policy":data.policy,
-						"OSSAccessKeyId":data.accessid, 
+						"OSSAccessKeyId":data.accessid,
 						"success_action_status":"200",
 						"signature":data.signature
 					}
@@ -1151,7 +1139,7 @@ function uploadSuccess(code){
 }
 send.oncontextmenu=function(){
 	showPopup([
-		'<span class="btnClose" id="btnCloseSendText"></span>',
+		'<span class="btnClose" id="btnClose"></span>',
 		'<p id="titleSendText" class="p1"></p>',
 		'<textarea id="txtSend" placeholder=""></textarea>',
 		'<button class="btn1" id="btnSendText"></button>'
@@ -1171,7 +1159,7 @@ send.oncontextmenu=function(){
 		"zh-CN":"发送",
 		"zh-TW":"發送"
 	});
-	id("btnCloseSendText").onclick=function(){
+	id("btnClose").onclick=function(){
 		closePopup("popSend");
 	};
 	id("btnSendText").onclick=function(){
@@ -1286,103 +1274,11 @@ menuItemLogin.onclick=function(){
 		document.body.appendChild(ssoIFrame);
 	}else{
 		showPopup([
-			'<span class="btnClose" id="btnCloseLogin"></span>',
-			'<div class="loginLogo"></div>',
-			'<p class="p4">',
-				'<span id="loginTip"></span>',
-				'<a id="signUp" class="link1"></a>',
-			'</p>',
-			'<input type="email" name="email" class="input1" id="inputEmail">',
-			'<input type="password" name="password" class="input1" id="inputPsw">',
-			'<button class="btn1" id="btnLogin"></button>'
+			'<span class="btnClose" id="btnClose"></span>',
+			'<iframe src="https://account.rthsoftware.cn/login-airportal.html"></iframe>'
 		],null,"popLogin");
-		id("btnCloseLogin").onclick=function(){
+		id("btnClose").onclick=function(){
 			closePopup("popLogin");
-		};
-		id("loginTip").innerText=multilang({
-			"en-US":"Log in to AirPortal with Your RTH Account",
-			"zh-CN":"使用热铁盒账号来登录到 AirPortal",
-			"zh-TW":"使用熱鐵盒賬號來登入到 AirPortal"
-		});
-		id("signUp").href="https://account.rthsoftware.cn/login.html?"+encodeData({
-			"continue":"https://airportal.cn/",
-			"page":"signup"
-		});
-		id("signUp").innerText=multilang({
-			"en-US":"Sign Up",
-			"zh-CN":"注册",
-			"zh-TW":"註冊"
-		});
-		id("inputEmail").placeholder=multilang({
-			"en-US":"Email",
-			"zh-CN":"邮箱",
-			"zh-TW":"郵箱"
-		});
-		id("inputEmail").onkeydown=function(event){
-			if(event.keyCode==13&&this.value){
-				id("inputPsw").focus();
-			}
-		}
-		id("inputPsw").placeholder=multilang({
-			"en-US":"Password",
-			"zh-CN":"密码",
-			"zh-TW":"密碼"
-		});
-		id("inputPsw").onkeydown=function(event){
-			if(event.keyCode==13){
-				btnLogin.click();
-			}
-		}
-		id("btnLogin").innerText=multilang({
-			"en-US":"Login",
-			"zh-CN":"登录",
-			"zh-TW":"登入"
-		});
-		id("btnLogin").onclick=function(){
-			if(id("inputEmail").value&&id("inputPsw").value){
-				var email=id("inputEmail").value.toLowerCase();
-				var password=MD5(id("inputPsw").value);
-				id("btnLogin").disabled=true;
-				fetch("https://api.rthe.cn/backend/userdata/verify?"+encodeData({
-					"email":email,
-					"password":password
-				})).then(function(response){
-					id("btnLogin").disabled=false;
-					if(response.ok||response.status==200){
-						return response.json();
-					}else{
-						error(response);
-					}
-				}).then(function(data){
-					if(data){
-						if(data.alert){
-							alert(data.alert)
-						}else if(data.index){
-							if(data.token){
-								login.email=data.email;
-								login.token=data.token;
-								login.username=data.username;
-								loggedIn(true);
-							}else if(confirm(multilang({
-								"en-US":"Incorrect password. Do you want to reset the password?",
-								"zh-CN":"密码错误。您想重置密码吗？",
-								"zh-TW":"密碼錯誤。您想重設密碼嗎？"
-							}))){
-								location.href="https://account.rthsoftware.cn/login.html?"+encodeData({
-									"email":email,
-									"page":"resetpassword"
-								});
-							}
-						}else{
-							notify(multilang({
-								"en-US":"This user does not exist.",
-								"zh-CN":"此用户不存在。",
-								"zh-TW":"此用戶不存在。"
-							}));
-						}
-					}
-				});
-			}
 		};
 	}
 	hideMenu();
@@ -1503,14 +1399,23 @@ menuItemSettings.onclick=function(){
 	showPopup([
 		'<p id="titleSettings" class="p1"></p>',
 		'<span class="line"></span>',
-		'<div>',
-			'<input type="checkbox" class="cbox" id="inputLoginRequired"></input>',
-			'<label id="lblLoginRequired" class="lblCbox" for="inputLoginRequired"></label>',
+		'<div class="contentLeftAligned">',
+			'<div>',
+				'<input type="checkbox" class="cbox" id="inputLoginRequired"></input>',
+				'<label id="lblLoginRequired" class="lblCbox" for="inputLoginRequired"></label>',
+			'</div>',
+			'<div>',
+				'<input type="checkbox" class="cbox" id="httpsEnabled"></input>',
+				'<label id="lblHttpsEnabled" class="lblCbox" for="httpsEnabled"></label>',
+			'</div>',
 		'</div>',
 		'<button class="btn1" id="btnDone5"></button>'
 	],null,"popSettings");
 	if(settings["loginRequired"]){
 		id("inputLoginRequired").checked=true;
+	}
+	if(location.protocol=="https:"){
+		id("httpsEnabled").checked=true;
 	}
 	id("titleSettings").innerText=multilang({
 		"en-US":"Settings",
@@ -1521,6 +1426,11 @@ menuItemSettings.onclick=function(){
 		"en-US":"Require my password when receiving my files",
 		"zh-CN":"接收我的文件时需要登录我的账号",
 		"zh-TW":"接收我的檔案時需要登入我的賬號"
+	});
+	id("lblHttpsEnabled").innerText=multilang({
+		"en-US":"Transfer files over HTTPS",
+		"zh-CN":"使用 HTTPS 协议传输文件",
+		"zh-TW":"使用 HTTPS 協定傳輸檔案"
 	});
 	id("inputLoginRequired").onchange=function(){
 		if(login.username){
@@ -1546,7 +1456,14 @@ menuItemSettings.onclick=function(){
 			this.checked=false;
 			menuItemLogin.click();
 		}
-	}
+	};
+	id("httpsEnabled").onchange=function(){
+		if(this.checked){
+			location.href="https://airportal.cn/";
+		}else{
+			location.href="http://ap.rthe.cn/";
+		}
+	};
 	id("btnDone5").innerText=multilang({
 		"en-US":"Done",
 		"zh-CN":"完成",
@@ -1559,7 +1476,7 @@ menuItemSettings.onclick=function(){
 };
 menuItemFeedback.onclick=function(){
 	showPopup([
-		'<span class="btnClose" id="btnCloseFeedback"></span>',
+		'<span class="btnClose" id="btnClose"></span>',
 		'<p id="titleFeedback" class="p1"></p>',
 		'<span class="line"></span>',
 		'<a id="faq" class="link1" href="https://faq-ap.rthe.cn/" target="_blank"></a>&amp;<a id="qqGroup" class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank"></a>',
@@ -1633,7 +1550,7 @@ menuItemFeedback.onclick=function(){
 			}
 		}
 	};
-	id("btnCloseFeedback").onclick=function(){
+	id("btnClose").onclick=function(){
 		closePopup("popFeedback");
 	};
 	hideMenu();
@@ -1672,7 +1589,7 @@ var uploader=new plupload.Uploader({
 	"init":{
 		"FilesAdded":function(up,files){
 			showPopup([
-				'<span class="btnClose" id="btnCloseUpload"></span>',
+				'<span class="btnClose" id="btnClose"></span>',
 				'<p id="filesSelected" class="p1" style="margin-top: -10px;"></p>',
 				'<p id="filesTip" style="margin-top: -10px;"></p>',
 				'<div id="selectedFileList" class="fileList"></div>',
@@ -1698,7 +1615,7 @@ var uploader=new plupload.Uploader({
 				'</table>',
 				'<button class="btn1" id="btnUpload"></button>'
 			],"uploadList","popSend","rebound");
-			id("btnCloseUpload").onclick=function(){
+			id("btnClose").onclick=function(){
 				uploader.splice();
 				closePopup("popSend");
 			};
