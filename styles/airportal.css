@@ -887,7 +887,7 @@ input[type="file"]{
 	.popUp {width: 80%;margin-left: -40%;}
 	.btnBack {top: -5px;left: 35px;}
 	.btnClose {top: -10px;right: 30px;}
-	#btnCloseFeedback,#btnCloseLogin {top: 30px;}
+	#popFeedback .btnClose,#popLogin .btnClose {top: 30px;}
 	.p1 {font-size: 16px;}
 	.p3 {font-size: 12px;}
 	.contentBox1 {width: 80%; left: 10%;}
