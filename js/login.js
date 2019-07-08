@@ -42,10 +42,10 @@ btnLogin.onclick=function(){
 						"zh-CN":"密码错误。您想重置密码吗？",
 						"zh-TW":"密碼錯誤。您想重設密碼嗎？"
 					}))){
-						open("login.html?"+encodeData({
+						location.href="login.html?"+encodeData({
 							"email":email,
 							"page":"resetpassword"
-						}));
+						});
 					}
 				}else{
 					alert(multilang({
