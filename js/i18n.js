@@ -5,7 +5,7 @@ try{
 		mrxLink.href="https://www.maorx.cn/";
 		var yszLink=document.createElement("a");
 		yszLink.classList.add("link1");
-		yszLink.href="https://shangzhen.rthe.cn/";
+		yszLink.href="https://www.yangshangzhen.com/";
 		mrxLink.target=yszLink.target="_blank";
 		if(!zh){
 			send.innerText="Send";
