@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w29a";
+var version="19w29b";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -401,7 +401,7 @@ function getPostData(data){
 function getQRCode(content){
 	return "https://api.rthe.cn/backend/get?"+encodeData({
 		"url":"http://qr.topscan.com/api.php?text="+content,
-		"username":"admin"
+		"username":login.username||"admin"
 	});
 }
 function getRandCharacter(len){
@@ -1365,8 +1365,17 @@ menuItemHistory.onclick=function(){
 								"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
 								"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
 							}))){
+								var reason;
+								if(login.username=="admin"){
+									reason=prompt("请输入原因。");
+									if(reason===null){
+										return false;
+									}
+								}
 								fetch("https://api.rthe.cn/backend/airportal/del",getPostData({
 									"code":code,
+									"reason":reason,
+									"token":login.token,
 									"username":login.username
 								})).then(function(response){
 									if(response.ok||response.status==200){
