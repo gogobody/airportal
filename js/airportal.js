@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w29b1";
+var version="19w29b2";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -360,10 +360,11 @@ function getInfo(code,password){
 						newA.innerText=decodeURIComponent(data[file].name);
 						if(data[file].download.length===1){
 							newA.href=data[file].download[0];
+							newA.target="_blank";
 						}else{
-							newA.setAttribute("index",file+1);
+							newA.dataset.index=file+1;
 							newA.onclick=function(){
-								var index=this.getAttribute("index")-1;
+								var index=this.dataset.index*1-1;
 								downloadFile(data[index]);
 							};
 						}
@@ -1261,6 +1262,11 @@ menuIcon.onclick=function(){
 mask.onclick=hideMenu;
 menuItemLogin.onclick=function(){
 	if(login.username){
+		notify(multilang({
+			"en-US":"Logging out...",
+			"zh-CN":"正在退出登录……",
+			"zh-TW":"正在登出……"
+		}),false);
 		var ssoIFrame=document.createElement("iframe");
 		ssoIFrame.style.display="none";
 		ssoIFrame.src="https://account.rthsoftware.cn/sso.html?"+encodeData({
@@ -1335,20 +1341,19 @@ menuItemHistory.onclick=function(){
 					lblPlaceholder.style.display="none";
 					for(var i=data.length-1;i>=0;i--){
 						var newHistory=document.createElement("span");
-						var newSpan=document.createElement("span");
+						var newA=document.createElement("a");
 						var newP=document.createElement("p");
 						var newDelBtn=document.createElement("span");
 						newHistory.classList.add("historyItem");
-						newHistory.setAttribute("code",data[i].code);
-						newSpan.innerText=data[i].code;
-						newSpan.title=multilang({
+						newHistory.dataset.code=data[i].code;
+						newA.href="https://airportal.cn/?code="+data[i].code;
+						newA.target="_blank";
+						newA.title=multilang({
 							"en-US":"Download",
 							"zh-CN":"下载",
 							"zh-TW":"下載"
 						});
-						newSpan.onclick=function(){
-							open("https://airportal.cn/"+this.parentElement.getAttribute("code"));
-						};
+						newA.innerText=data[i].code;
 						newP.innerText=decodeURIComponent(data[i].name);
 						newDelBtn.classList.add("btnDel");
 						newDelBtn.title=multilang({
@@ -1358,7 +1363,7 @@ menuItemHistory.onclick=function(){
 						});
 						newDelBtn.onclick=function(){
 							var thisItem=this.parentElement;
-							var code=thisItem.getAttribute("code");
+							var code=thisItem.dataset.code;
 							var filename=thisItem.getElementsByTagName("p")[0].innerText;
 							if(confirm(multilang({
 								"en-US":"Are you sure that you want to delete "+filename+" from the server?",
@@ -1386,7 +1391,7 @@ menuItemHistory.onclick=function(){
 								});
 							}
 						};
-						newHistory.appendChild(newSpan);
+						newHistory.appendChild(newA);
 						newHistory.appendChild(newP);
 						newHistory.appendChild(newDelBtn);
 						id("historyList").appendChild(newHistory);

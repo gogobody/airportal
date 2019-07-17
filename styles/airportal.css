@@ -521,16 +521,20 @@ a,button {outline: none;}
 	font-family: "Microsoft Yahei";
 	font-weight: bold;
 }
-.historyItem p{
+.historyItem a {
+	color: black;
+	text-decoration: none;
+}
+.historyItem p {
 	font-size: 10px;
 	line-height: 0px;
 	font-weight: normal;
 	color: rgba(0,0,0,0.5);
 }
-.historyItem span{
+.historyItem span {
 	cursor: pointer;
 }
-.placeholder{
+.placeholder {
 	color: rgba(0,0,0,0.3);
 }
 .btnDel {
