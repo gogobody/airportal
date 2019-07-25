@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w30a1";
+var version="19w30a2";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -192,7 +192,6 @@ function downloadFile(fileInfo){
 	}
 }
 function error(e){
-	clearNotification();
 	var text=multilang({
 		"en-US":"Unable to connect to the server",
 		"zh-CN":"无法连接至服务器",
@@ -215,11 +214,6 @@ function error(e){
 }
 function getInfo(code,password){
 	if(code){
-		notify(multilang({
-			"en-US":"Loading...",
-			"zh-CN":"正在加载……",
-			"zh-TW":"正在加載……"
-		}),false);
 		id("btnSub").disabled=true;
 		invalidAttempt++;
 		fetch("https://api.rthe.cn/backend/airportal/getinfo?"+encodeData({
@@ -227,7 +221,6 @@ function getInfo(code,password){
 			"password":password,
 			"username":login.username
 		})).then(function(response){
-			clearNotification();
 			id("btnSub").disabled=false;
 			if(response.ok||response.status==200){
 				return response.text();
