@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w30b";
+var version="19w30b1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1059,8 +1059,8 @@ function uploadSuccess(code){
 	id("recvCode").innerText=code;
 	id("whenReceving").innerText=multilang({
 		"en-US":"When receving files, please enter this code.",
-		"zh-CN":"接收文件时，请输入该四位数密码。",
-		"zh-TW":"接收檔案時，請輸入該四位數密碼。"
+		"zh-CN":"接收文件时，请输入该"+code.toString().length+"位数取件码。",
+		"zh-TW":"接收檔案時，請輸入該"+code.toString().length+"位數取件碼。"
 	});
 	id("viewQRC").style.marginRight="0px";
 	id("btnDone0").innerText=multilang({
