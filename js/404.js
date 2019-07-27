@@ -1,5 +1,5 @@
-var code=location.pathname.substring(1);
-if(parseInt(code)&&code.length==4){
+var code=parseInt(location.pathname.substring(1));
+if(code>=1000&&code<=999999){
 	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
 		location.href="/?code="+code;
 	}else{

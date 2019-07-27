@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w30a3";
+var version="19w30b";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1105,14 +1105,13 @@ function uploadSuccess(code){
 		popRecvCode.classList.add("popRecvCode");
 		popRecvCode.innerText=code;
 		document.body.appendChild(popRecvCode);
+		popRecvCode.style.right="calc(50% - "+(popRecvCode.offsetWidth/2)+"px)";
 		setTimeout(function(){
 			popRecvCode.style.transform="scale(0.5,0.5)";
 		},500);
 		setTimeout(function(){
+			popRecvCode.style.right="-"+(popRecvCode.offsetWidth*0.3-30)+"px";
 			popRecvCode.style.top="0px";
-			popRecvCode.style.left="100%";
-			popRecvCode.style.marginTop="0px";
-			popRecvCode.style.marginLeft="-135px";
 		},750);
 		setTimeout(function(){
 			popRecvCode.style.transformOrigin="65% 50%";
@@ -1187,7 +1186,7 @@ receive.onclick=function(){
 			'<span id="enterCode"></span>',
 			'<p id="howToGetCode" class="tip"></p>',
 		'</p>',
-		'<input type="tel" id="inputCode" class="inputCode" maxlength="4" autocomplete="off"><br>',
+		'<input type="tel" id="inputCode" class="inputCode" maxlength="6" autocomplete="off"><br>',
 		'<button class="btn1" id="btnSub"></button>',
 		'<span class="btnBack" id="btnBackRecv"></span>'
 	],"recvBox0","popRecv");
@@ -1249,7 +1248,7 @@ menuIcon.onclick=function(){
 	},10);
 	mask.style.display="block";
 	menuItemSelectServer.style.position="";
-	menuItemSelectServer.style.marginLeft="0";
+	menuItemSelectServer.style.marginLeft="0px";
 	menuServers.style.display="none";
 	menuServers.style.marginLeft="200%";
 };
@@ -1719,7 +1718,7 @@ if(isiOS){
 		});
 	},100);
 }
-if(parseInt($_GET["code"])&&$_GET["code"].length==4){
+if(parseInt($_GET["code"])>=1000&&parseInt($_GET["code"])<=999999){
 	if(isTencent){
 		tmpCode=$_GET["code"];
 	}else{

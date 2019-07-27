@@ -570,13 +570,9 @@ a,button {outline: none;}
 }
 .popRecvCode {
 	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-top: -66px;
-	margin-left: -78px;
+	top: calc(50% - 66px);
 	padding: 20px;
 	padding-right: 10px;
-	max-width: 166px;
 	background-color: white;
 
 	text-align: center;
