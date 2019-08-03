@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w31a";
+var version="19w31a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -15,7 +15,6 @@ var $_GET=(function(){
 	}
 	return json;
 })();
-var chunk,currentExpTime,fileBackend,fileCount,fileDone,option,randomKey,signature,uploadCode;
 var chunkSize=100*1048576;
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 var invalidAttempt=0;
@@ -447,7 +446,7 @@ function loadExpTime(){
 					orderSubmitted=null;
 					localStorage.removeItem("orderSubmitted");
 				}
-				currentExpTime=data*1;
+				window.currentExpTime=data*1;
 				privilegeStatus.innerText=multilang({
 					"en-US":"Premium Plan "+expTime+" Days Remaining",
 					"zh-CN":"高级账号 剩余"+expTime+"天",
@@ -472,7 +471,7 @@ function loadExpTime(){
 	}
 }
 function loadServerList(auto){
-	fileBackend=window.servers[auto].host;
+	window.fileBackend=window.servers[auto].host;
 	Object.keys(window.servers).forEach(function(key){
 		var newA=document.createElement("a");
 		var newTick=document.createElement("span");
@@ -480,7 +479,7 @@ function loadServerList(auto){
 		newA.classList.add("menuItem");
 		newA.id=key;
 		newA.onclick=function(){
-			if(!currentExpTime&&window.servers[this.id].premium){
+			if(!window.currentExpTime&&window.servers[this.id].premium){
 				notify(multilang({
 					"en-US":"This server is for premium account users only.",
 					"zh-CN":"此服务器仅限高级账号用户使用。",
@@ -490,7 +489,7 @@ function loadServerList(auto){
 					menuItemLogin.click();
 				}
 			}else{
-				fileBackend=window.servers[this.id].host;
+				window.fileBackend=window.servers[this.id].host;
 				var tick=document.getElementsByClassName("tick");
 				for(var i=0;i<tick.length;i++){
 					if(tick[i].parentElement==this){
@@ -783,7 +782,7 @@ function loggedIn(newLogin){
 					}
 				}
 				var action="续期";
-				if(!currentExpTime){
+				if(!window.currentExpTime){
 					action="激活";
 				}
 				fetch("https://api.rthe.cn/backend/feedback",getPostData({
@@ -975,16 +974,16 @@ function showPopup(html,elementId,parentId,animation){
 	}
 }
 function upload(up,files,config){
-	randomKey=getRandStr(10);
+	window.key=login.username||getRandStr(10);
 	if(config.password){
 		config.password=MD5(config.password);
 	}
 	fetch("https://api.rthe.cn/backend/airportal/getcode",getPostData({
 		"chunksize":chunkSize,
 		"downloads":config.downloads,
-		"host":fileBackend,
+		"host":window.fileBackend,
 		"info":JSON.stringify(files),
-		"key":randomKey,
+		"key":window.key,
 		"password":config.password,
 		"username":login.username
 	})).then(function(response){
@@ -997,12 +996,12 @@ function upload(up,files,config){
 		if(data){
 			if(data.alert){
 				alert(data.alert);
-				id("inputMaxDl").value=fileCount+1;
+				id("inputMaxDl").value=window.fileCount+1;
 				if(!login.username){
 					menuItemLogin.click();
 				}
 			}else{
-				uploadCode=data.code;
+				window.uploadCode=data.code;
 				document.title="["+multilang({
 					"en-US":"Uploading",
 					"zh-CN":"正在上传",
@@ -1018,7 +1017,7 @@ function upload(up,files,config){
 					"zh-CN":"正在上传……",
 					"zh-TW":"正在上傳……"
 				});
-				option={
+				window.option={
 					"url":"https://"+data.host,
 					"multipart_params":{
 						"policy":data.policy,
@@ -1565,7 +1564,7 @@ var uploader=new plupload.Uploader({
 	"runtimes":"html5",
 	"browse_button":"send",
 	"drop_element":"send",
-	"url":"https://"+fileBackend,
+	"url":"https://"+window.fileBackend,
 	"chunk_size":chunkSize,
 	"init":{
 		"FilesAdded":function(up,files){
@@ -1639,12 +1638,12 @@ var uploader=new plupload.Uploader({
 				"zh-TW":"上傳"
 			});
 			id("btnUpload").onclick=function(){
-				chunk=1;
-				fileCount=files.length;
-				fileDone=0;
+				window.chunk=1;
+				window.fileCount=files.length;
+				window.fileDone=0;
 				var downloads=id("inputMaxDl").value;
 				if(!downloads||parseInt(downloads)<1){
-					downloads=fileCount+1;
+					downloads=window.fileCount+1;
 				}
 				upload(up,files,{
 					"downloads":downloads,
@@ -1653,8 +1652,8 @@ var uploader=new plupload.Uploader({
 			};
 		},
 		"BeforeUpload":function(up,file){
-			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/1/"+file.name;
-			up.setOption(option);
+			window.option["multipart_params"]["key"]=window.uploadCode+"/"+window.key+"/1/"+file.name;
+			up.setOption(window.option);
 		},
 		"UploadProgress":function(up,file){
 			var percent=file.percent;
@@ -1668,7 +1667,7 @@ var uploader=new plupload.Uploader({
 					"en-US":"Almost there",
 					"zh-CN":"马上就好",
 					"zh-TW":"馬上就好"
-				})+" ("+(fileDone+1)+"/"+fileCount+")";
+				})+" ("+(window.fileDone+1)+"/"+window.fileCount+")";
 			}else{
 				id("lblUploadP").innerText=multilang({
 					"en-US":"Uploading",
@@ -1679,14 +1678,14 @@ var uploader=new plupload.Uploader({
 			id("progressBar0").style.width=percent+"px";
 		},
 		"ChunkUploaded":function(up,file){
-			chunk++;
-			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/"+chunk+"/"+file.name;
-			up.setOption(option);
+			window.chunk++;
+			window.option["multipart_params"]["key"]=window.uploadCode+"/"+window.key+"/"+window.chunk+"/"+file.name;
+			up.setOption(window.option);
 		},
 		"FileUploaded":function(){
-			fileDone++;
-			if(fileDone>=fileCount){
-				uploadSuccess(uploadCode);
+			window.fileDone++;
+			if(window.fileDone>=window.fileCount){
+				uploadSuccess(window.uploadCode);
 			}
 		},
 		"Error":function(up,err){
