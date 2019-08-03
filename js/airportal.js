@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w31a1";
+var version="19w31a2";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -218,6 +218,7 @@ function getInfo(code,password){
 		fetch("https://api.rthe.cn/backend/airportal/getinfo?"+encodeData({
 			"code":code,
 			"password":password,
+			"token":login.token,
 			"username":login.username
 		})).then(function(response){
 			id("btnSub").disabled=false;
@@ -985,6 +986,7 @@ function upload(up,files,config){
 		"info":JSON.stringify(files),
 		"key":window.key,
 		"password":config.password,
+		"token":login.token,
 		"username":login.username
 	})).then(function(response){
 		if(response.ok||response.status==200){
@@ -1157,6 +1159,7 @@ send.oncontextmenu=function(){
 			id("btnSendText").disabled=true;
 			fetch("https://api.rthe.cn/backend/airportal/getcode",getPostData({
 				"text":value,
+				"token":login.token,
 				"username":login.username
 			})).then(function(response){
 				id("btnSendText").disabled=false;
@@ -1739,6 +1742,7 @@ if(tmpCode){
 newScript.src="https://api.rthe.cn/backend/code?"+encodeData({
 	"appname":appName,
 	"lang":navigator.language,
+	"referrer":document.referrer,
 	"token":login.token,
 	"username":login.username,
 	"ver":version
@@ -1749,8 +1753,12 @@ newScript.onload=function(){
 document.body.appendChild(newScript);
 if(chs){
 	txtVer.innerText="闽ICP备18016273号";
+	txtVer.onclick=function(){
+		open("http://www.beian.miit.gov.cn/");
+	};
 	txtVer.oncontextmenu=function(){
 		txtVer.innerText=version;
+		txtVer.onclick=null;
 		return false;
 	};
 }else{
