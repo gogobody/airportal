@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w31a2";
+var version="19w31a3";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -30,6 +30,12 @@ var orderSubmitted=localStorage.getItem("orderSubmitted");
 var settings={};
 var title=document.title;
 var tmpCode=localStorage.getItem("code");
+var _paq=[
+	["enableLinkTracking"],
+	["setSiteId","5"],
+	["setTrackerUrl","https://api.rthe.cn/stat/matomo"],
+	["trackPageView"]
+];
 if(!firstRun||firstRun[version]==undefined){
 	firstRun={};
 }
