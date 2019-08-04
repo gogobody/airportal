@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w31a3";
+var version="19w32a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1704,27 +1704,25 @@ var uploader=new plupload.Uploader({
 });
 uploader.init();
 if(isiOS){
-	setTimeout(function(){
-		var longPress,longPressTimeout;
-		document.getElementsByTagName("input")[0].addEventListener("touchstart",function(){
-			send.classList.add("send-active");
-			longPress=false;
-			longPressTimeout=setTimeout(function(){
-				longPress=true;
-			},1000);
-		},{
-			passive:true
-		});
-		document.getElementsByTagName("input")[0].addEventListener("touchend",function(){
-			send.classList.remove("send-active");
-			clearTimeout(longPressTimeout);
-			if(longPress){
-				send.oncontextmenu();
-			}
-		},{
-			passive:true
-		});
-	},100);
+	var longPress,longPressTimeout;
+	send.addEventListener("touchstart",function(){
+		send.classList.add("send-active");
+		longPress=false;
+		longPressTimeout=setTimeout(function(){
+			longPress=true;
+		},1000);
+	},{
+		passive:true
+	});
+	send.addEventListener("touchend",function(){
+		send.classList.remove("send-active");
+		clearTimeout(longPressTimeout);
+		if(longPress){
+			send.oncontextmenu();
+		}
+	},{
+		passive:true
+	});
 }
 if(parseInt($_GET["code"])>=1000&&parseInt($_GET["code"])<=999999){
 	if(isTencent){
