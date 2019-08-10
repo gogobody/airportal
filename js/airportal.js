@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w32a";
+var version="19w32b";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -981,7 +981,7 @@ function showPopup(html,elementId,parentId,animation){
 	}
 }
 function upload(up,files,config){
-	window.key=login.username||getRandStr(10);
+	window.key=getRandStr(10);
 	if(config.password){
 		config.password=MD5(config.password);
 	}
@@ -1290,9 +1290,7 @@ menuItemHistory.onclick=function(){
 	showPopup([
 		'<p id="titleHistory" class="p1"></p>',
 		'<span class="line"></span>',
-		'<div id="historyList">',
-			'<p id="lblPlaceholder" class="placeholder"></p>',
-		'</div>',
+		'<div id="historyList"></div>',
 		'<button class="btn1" id="btnDoneHistory"></button>'
 	],null,"popHistory");
 	id("titleHistory").innerText=multilang({
@@ -1308,102 +1306,90 @@ menuItemHistory.onclick=function(){
 	id("btnDoneHistory").onclick=function(){
 		closePopup("popHistory");
 	};
-	var loadHistory=function(){
+	var loadHistory=function(response){
+		if(response.ok||response.status==200){
+			response.json().then(function(data){
+				if(data){
+					window.lblPlaceholder.innerText=multilang({
+						"en-US":"You have not uploaded any files yet",
+						"zh-CN":"您尚未上传任何文件",
+						"zh-TW":"您尚未上傳任何檔案"
+					});
+					if(data.length>0){
+						window.lblPlaceholder.style.display="none";
+						for(var i=data.length-1;i>=0;i--){
+							var newHistory=document.createElement("span");
+							var newA=document.createElement("a");
+							var newP=document.createElement("p");
+							var newDelBtn=document.createElement("span");
+							newHistory.classList.add("historyItem");
+							newHistory.dataset.code=data[i].code;
+							newA.href="https://airportal.cn/?code="+data[i].code;
+							newA.target="_blank";
+							newA.title=multilang({
+								"en-US":"Download",
+								"zh-CN":"下载",
+								"zh-TW":"下載"
+							});
+							newA.innerText=data[i].code;
+							newP.innerText=decodeURIComponent(data[i].name);
+							newDelBtn.classList.add("btnDel");
+							newDelBtn.title=multilang({
+								"en-US":"Delete",
+								"zh-CN":"删除",
+								"zh-TW":"刪除"
+							});
+							newDelBtn.onclick=function(){
+								var thisItem=this.parentElement;
+								var code=thisItem.dataset.code;
+								var filename=thisItem.getElementsByTagName("p")[0].innerText;
+								if(confirm(multilang({
+									"en-US":"Are you sure that you want to delete "+filename+" from the server?",
+									"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
+									"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
+								}))){
+									loadPlaceholder();
+									fetch("https://api.rthe.cn/backend/airportal/del",getPostData({
+										"code":code,
+										"token":login.token,
+										"username":login.username
+									})).then(loadHistory).catch(loadHistory);
+								}
+							};
+							newHistory.appendChild(newA);
+							newHistory.appendChild(newP);
+							newHistory.appendChild(newDelBtn);
+							id("historyList").appendChild(newHistory);
+						}
+					}else{
+						window.lblPlaceholder.style.display=id("historyList").style.marginTop="";
+					}
+				}
+			});
+		}else{
+			window.lblPlaceholder.innerText=multilang({
+				"en-US":"Unable to connect to the server",
+				"zh-CN":"无法连接至服务器",
+				"zh-TW":"無法連接至伺服器"
+			});
+		}
+	};
+	var loadPlaceholder=function(){
 		id("historyList").innerHTML="";
-		var lblPlaceholder=document.createElement("p");
-		lblPlaceholder.classList.add("placeholder");
-		id("historyList").appendChild(lblPlaceholder);
-		lblPlaceholder.innerText=multilang({
+		window.lblPlaceholder=document.createElement("p");
+		window.lblPlaceholder.classList.add("placeholder");
+		id("historyList").appendChild(window.lblPlaceholder);
+		window.lblPlaceholder.innerText=multilang({
 			"en-US":"Loading",
 			"zh-CN":"正在加载",
 			"zh-TW":"正在加載"
 		});
-		fetch("https://api.rthe.cn/backend/airportal/get?"+encodeData({
-			"token":login.token,
-			"username":login.username
-		})).then(function(response){
-			if(response.ok||response.status==200){
-				return response.json();
-			}else{
-				lblPlaceholder.innerText=multilang({
-					"en-US":"Unable to connect to the server",
-					"zh-CN":"无法连接至服务器",
-					"zh-TW":"無法連接至伺服器"
-				})+" ("+response.status+")";
-			}
-		}).then(function(data){
-			if(data){
-				lblPlaceholder.innerText=multilang({
-					"en-US":"You have not uploaded any files yet",
-					"zh-CN":"您尚未上传任何文件",
-					"zh-TW":"您尚未上傳任何檔案"
-				});
-				if(data.length>0){
-					lblPlaceholder.style.display="none";
-					for(var i=data.length-1;i>=0;i--){
-						var newHistory=document.createElement("span");
-						var newA=document.createElement("a");
-						var newP=document.createElement("p");
-						var newDelBtn=document.createElement("span");
-						newHistory.classList.add("historyItem");
-						newHistory.dataset.code=data[i].code;
-						newA.href="https://airportal.cn/?code="+data[i].code;
-						newA.target="_blank";
-						newA.title=multilang({
-							"en-US":"Download",
-							"zh-CN":"下载",
-							"zh-TW":"下載"
-						});
-						newA.innerText=data[i].code;
-						newP.innerText=decodeURIComponent(data[i].name);
-						newDelBtn.classList.add("btnDel");
-						newDelBtn.title=multilang({
-							"en-US":"Delete",
-							"zh-CN":"删除",
-							"zh-TW":"刪除"
-						});
-						newDelBtn.onclick=function(){
-							var thisItem=this.parentElement;
-							var code=thisItem.dataset.code;
-							var filename=thisItem.getElementsByTagName("p")[0].innerText;
-							if(confirm(multilang({
-								"en-US":"Are you sure that you want to delete "+filename+" from the server?",
-								"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
-								"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
-							}))){
-								var reason;
-								if(login.username=="admin"){
-									reason=prompt("请输入原因。");
-									if(reason===null){
-										return false;
-									}
-								}
-								fetch("https://api.rthe.cn/backend/airportal/del",getPostData({
-									"code":code,
-									"reason":reason,
-									"token":login.token,
-									"username":login.username
-								})).then(function(response){
-									if(response.ok||response.status==200){
-										loadHistory();
-									}else{
-										error(response);
-									}
-								});
-							}
-						};
-						newHistory.appendChild(newA);
-						newHistory.appendChild(newP);
-						newHistory.appendChild(newDelBtn);
-						id("historyList").appendChild(newHistory);
-					}
-				}else{
-					lblPlaceholder.style.display=id("historyList").style.marginTop="";
-				}
-			}
-		});
-	}
-	loadHistory();
+	};
+	loadPlaceholder();
+	fetch("https://api.rthe.cn/backend/airportal/get?"+encodeData({
+		"token":login.token,
+		"username":login.username
+	})).then(loadHistory).catch(loadHistory);
 	hideMenu();
 };
 menuItemSettings.onclick=function(){
