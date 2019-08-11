@@ -15,7 +15,8 @@ btnLogin.onclick=function(){
 		btnLogin.disabled=true;
 		fetch("https://api.rthe.cn/backend/userdata/verify?"+encodeData({
 			"email":email,
-			"password":password
+			"password":password,
+			"referrer":document.referrer
 		})).then(function(response){
 			btnLogin.disabled=false;
 			if(response.ok||response.status==200){
@@ -32,11 +33,15 @@ btnLogin.onclick=function(){
 						localStorage.setItem("Email",data.email);
 						localStorage.setItem("Token",data.token);
 						localStorage.setItem("Username",data.username);
-						parent.postMessage(btoa(JSON.stringify({
-							"email":data.email,
-							"token":data.token,
-							"username":data.username
-						})),"*");
+						if(self!=top&&(!document.referrer||/^https:\/\/airportal\.cn/.test(document.referrer))){
+							parent.postMessage(btoa(JSON.stringify({
+								"email":data.email,
+								"token":data.token,
+								"username":data.username
+							})),"*");
+						}else{
+							location.href="/";
+						}
 					}else if(confirm(multilang({
 						"en-US":"Incorrect password. Do you want to reset the password?",
 						"zh-CN":"密码错误。您想重置密码吗？",
