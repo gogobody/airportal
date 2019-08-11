@@ -73,5 +73,5 @@ if(!zh){
 	btnLogin.innerText="登入";
 }
 if(self==top||!/^https:\/\/airportal\.cn/.test(document.referrer)){
-	top.location.href="https://airportal.cn/";
+	location.href="https://airportal.cn/";
 }
