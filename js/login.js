@@ -33,15 +33,11 @@ btnLogin.onclick=function(){
 						localStorage.setItem("Email",data.email);
 						localStorage.setItem("Token",data.token);
 						localStorage.setItem("Username",data.username);
-						if(self!=top&&(!document.referrer||/^https:\/\/airportal\.cn/.test(document.referrer))){
-							parent.postMessage(btoa(JSON.stringify({
-								"email":data.email,
-								"token":data.token,
-								"username":data.username
-							})),"*");
-						}else{
-							location.href="/";
-						}
+						parent.postMessage(btoa(JSON.stringify({
+							"email":data.email,
+							"token":data.token,
+							"username":data.username
+						})),"*");
 					}else if(confirm(multilang({
 						"en-US":"Incorrect password. Do you want to reset the password?",
 						"zh-CN":"密码错误。您想重置密码吗？",
@@ -75,4 +71,7 @@ if(!zh){
 	inputEmail.placeholder="郵箱";
 	inputPsw.placeholder="密碼";
 	btnLogin.innerText="登入";
+}
+if(self==top||!/^https:\/\/airportal\.cn/.test(document.referrer)){
+	top.location.href="https://airportal.cn/";
 }
