@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w32b";
+var version="19w33a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -410,16 +410,6 @@ function getRandCharacter(len){
 		str+=unescape("%u"+(Math.round(Math.random()*20901)+19968).toString(16));
 	}
 	return str;
-}
-function getRandStr(len){
-	len=len||32;
-	var chars="ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
-	var maxPos=chars.length;
-	var pwd="";
-	for(var i=0;i<len;i++){
-		pwd+=chars.charAt(Math.floor(Math.random()*maxPos));
-	}
-	return pwd;
 }
 function hideMenu(){
 	mask.style.display="none";
@@ -981,7 +971,6 @@ function showPopup(html,elementId,parentId,animation){
 	}
 }
 function upload(up,files,config){
-	window.key=getRandStr(10);
 	if(config.password){
 		config.password=MD5(config.password);
 	}
@@ -990,7 +979,6 @@ function upload(up,files,config){
 		"downloads":config.downloads,
 		"host":window.fileBackend,
 		"info":JSON.stringify(files),
-		"key":window.key,
 		"password":config.password,
 		"token":login.token,
 		"username":login.username
@@ -1009,6 +997,7 @@ function upload(up,files,config){
 					menuItemLogin.click();
 				}
 			}else{
+				window.key=data.key;
 				window.uploadCode=data.code;
 				document.title="["+multilang({
 					"en-US":"Uploading",
