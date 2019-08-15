@@ -72,6 +72,6 @@ if(!zh){
 	inputPsw.placeholder="密碼";
 	btnLogin.innerText="登入";
 }
-if(self==top||!/^https:\/\/airportal\.cn/.test(document.referrer)){
+if(self==top||document.referrer&&!/^https:\/\/airportal\.cn/.test(document.referrer)){
 	location.href="https://airportal.cn/";
 }
