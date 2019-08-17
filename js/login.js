@@ -13,7 +13,7 @@ btnLogin.onclick=function(){
 		var email=inputEmail.value.toLowerCase();
 		var password=MD5(inputPsw.value);
 		btnLogin.disabled=true;
-		fetch("https://api.rthe.cn/backend/userdata/verify?"+encodeData({
+		fetch("https://api.rthsoftware.cn/backend/userdata/verify?"+encodeData({
 			"email":email,
 			"password":password,
 			"referrer":document.referrer

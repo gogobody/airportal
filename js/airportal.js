@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w33a";
+var version="19w33a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -33,7 +33,7 @@ var tmpCode=localStorage.getItem("code");
 var _paq=[
 	["enableLinkTracking"],
 	["setSiteId","5"],
-	["setTrackerUrl","https://api.rthe.cn/stat/matomo"],
+	["setTrackerUrl","https://api.rthsoftware.cn/stat/matomo"],
 	["trackPageView"]
 ];
 if(!firstRun||firstRun[version]==undefined){
@@ -221,7 +221,7 @@ function getInfo(code,password){
 	if(code){
 		id("btnSub").disabled=true;
 		invalidAttempt++;
-		fetch("https://api.rthe.cn/backend/airportal/getinfo?"+encodeData({
+		fetch("https://api.rthsoftware.cn/backend/airportal/getinfo?"+encodeData({
 			"code":code,
 			"password":password,
 			"token":login.token,
@@ -399,7 +399,7 @@ function getPostData(data){
 	};
 }
 function getQRCode(content){
-	return "https://api.rthe.cn/backend/get?"+encodeData({
+	return "https://api.rthsoftware.cn/backend/get?"+encodeData({
 		"url":"http://qr.topscan.com/api.php?text="+content,
 		"username":login.username||"admin"
 	});
@@ -427,7 +427,7 @@ function loadExpTime(){
 		localStorage.removeItem("orderSubmitted");
 	}
 	if(document.getElementById("privilegeStatus")){
-		fetch("https://api.rthe.cn/backend/get?"+encodeData({
+		fetch("https://api.rthsoftware.cn/backend/get?"+encodeData({
 			"name":appName,
 			"token":login.token,
 			"url":"privilege",
@@ -782,7 +782,7 @@ function loggedIn(newLogin){
 				if(!window.currentExpTime){
 					action="激活";
 				}
-				fetch("https://api.rthe.cn/backend/feedback",getPostData({
+				fetch("https://api.rthsoftware.cn/backend/feedback",getPostData({
 					"appname":appName,
 					"email":login.email,
 					"lang":navigator.language,
@@ -849,7 +849,7 @@ function loggedIn(newLogin){
 	newP.id="privilegeStatus";
 	newItem.appendChild(newP);
 	loadExpTime();
-	fetch("https://api.rthe.cn/backend/userdata/set?"+encodeData({
+	fetch("https://api.rthsoftware.cn/backend/userdata/set?"+encodeData({
 		"appname":appName,
 		"token":login.token,
 		"username":login.username
@@ -974,7 +974,7 @@ function upload(up,files,config){
 	if(config.password){
 		config.password=MD5(config.password);
 	}
-	fetch("https://api.rthe.cn/backend/airportal/getcode",getPostData({
+	fetch("https://api.rthsoftware.cn/backend/airportal/getcode",getPostData({
 		"chunksize":chunkSize,
 		"downloads":config.downloads,
 		"host":window.fileBackend,
@@ -1065,7 +1065,7 @@ function uploadSuccess(code){
 		"zh-TW":"完成"
 	});
 	copyLink.onclick=function(){
-		var url="https://"+code+".rthe.cn/";
+		var url="https://"+code+".airportal.cn/";
 		if("clipboard" in navigator){
 			navigator.clipboard.writeText(url).then(function(){
 				notify(multilang({
@@ -1152,7 +1152,7 @@ send.oncontextmenu=function(){
 		var value=id("txtSend").value;
 		if(value){
 			id("btnSendText").disabled=true;
-			fetch("https://api.rthe.cn/backend/airportal/getcode",getPostData({
+			fetch("https://api.rthsoftware.cn/backend/airportal/getcode",getPostData({
 				"text":value,
 				"token":login.token,
 				"username":login.username
@@ -1338,7 +1338,7 @@ menuItemHistory.onclick=function(){
 									"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
 								}))){
 									loadPlaceholder();
-									fetch("https://api.rthe.cn/backend/airportal/del",getPostData({
+									fetch("https://api.rthsoftware.cn/backend/airportal/del",getPostData({
 										"code":code,
 										"token":login.token,
 										"username":login.username
@@ -1375,7 +1375,7 @@ menuItemHistory.onclick=function(){
 		});
 	};
 	loadPlaceholder();
-	fetch("https://api.rthe.cn/backend/airportal/get?"+encodeData({
+	fetch("https://api.rthsoftware.cn/backend/airportal/get?"+encodeData({
 		"token":login.token,
 		"username":login.username
 	})).then(loadHistory).catch(loadHistory);
@@ -1409,7 +1409,7 @@ menuItemSettings.onclick=function(){
 	id("inputLoginRequired").onchange=function(){
 		if(login.username){
 			settings["loginRequired"]=this.checked;
-			fetch("https://api.rthe.cn/backend/userdata/set",getPostData({
+			fetch("https://api.rthsoftware.cn/backend/userdata/set",getPostData({
 				"appname":appName,
 				"key":"loginRequired",
 				"token":login.token,
@@ -1447,7 +1447,7 @@ menuItemFeedback.onclick=function(){
 		'<span class="btnClose" id="'+btnCloseId+'"></span>',
 		'<p id="titleFeedback" class="p1"></p>',
 		'<span class="line"></span>',
-		'<a id="faq" class="link1" href="https://faq-ap.rthe.cn/" target="_blank"></a>&amp;<a id="qqGroup" class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank"></a>',
+		'<a id="faq" class="link1" href="https://doc.rthsoftware.cn/faq-ap" target="_blank"></a>&amp;<a id="qqGroup" class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank"></a>',
 		'<textarea id="txtFeedback"></textarea>',
 		'<button class="btn1" id="btnSendFeed"></button>'
 	],null,"popFeedback");
@@ -1485,7 +1485,7 @@ menuItemFeedback.onclick=function(){
 				"zh-TW":"請輸入您的電子郵箱地址。"
 			}));
 			if(emailPattern.test(email)){
-				fetch("https://api.rthe.cn/backend/feedback",getPostData({
+				fetch("https://api.rthsoftware.cn/backend/feedback",getPostData({
 					"appname":appName,
 					"email":email,
 					"lang":navigator.language,
@@ -1718,7 +1718,7 @@ if(tmpCode){
 		}
 	}
 }
-newScript.src="https://api.rthe.cn/backend/code?"+encodeData({
+newScript.src="https://api.rthsoftware.cn/backend/code?"+encodeData({
 	"appname":appName,
 	"lang":navigator.language,
 	"referrer":document.referrer,
