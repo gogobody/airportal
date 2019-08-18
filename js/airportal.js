@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="19w33a1";
+var version="19w34a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1029,6 +1029,7 @@ function upload(up,files,config){
 	});
 }
 function uploadSuccess(code){
+	var url="https://"+code+".airportal.cn/";
 	document.title="[取件码 "+code+"] "+title;
 	showPopup([
 		'<p id="sentSuccessfully" class="p1"></p>',
@@ -1065,7 +1066,6 @@ function uploadSuccess(code){
 		"zh-TW":"完成"
 	});
 	copyLink.onclick=function(){
-		var url="https://"+code+".airportal.cn/";
 		if("clipboard" in navigator){
 			navigator.clipboard.writeText(url).then(function(){
 				notify(multilang({
@@ -1088,7 +1088,7 @@ function uploadSuccess(code){
 			'<span class="btnBack" id="btnBackQRC"></span>'
 		],"sendBox2","popSend","slideInFromRight");
 		var qrcode=new Image(200,200);
-		qrcode.src=getQRCode("https://airportal.cn/?code="+code);
+		qrcode.src=getQRCode(url);
 		id("QRBox").appendChild(qrcode);
 		id("btnBackQRC").onclick=function(){
 			closePopup("sendBox2","slideOut");
@@ -1313,7 +1313,7 @@ menuItemHistory.onclick=function(){
 							var newDelBtn=document.createElement("span");
 							newHistory.classList.add("historyItem");
 							newHistory.dataset.code=data[i].code;
-							newA.href="https://airportal.cn/?code="+data[i].code;
+							newA.href="https://"+data[i].code+".airportal.cn/";
 							newA.target="_blank";
 							newA.title=multilang({
 								"en-US":"Download",
