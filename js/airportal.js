@@ -1,9 +1,7 @@
-var appName="AirPortal";
-var version="19w34a";
+var version="19w35a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
-
 var $_GET=(function(){
 	var json={};
 	if(location.search){
@@ -20,12 +18,6 @@ var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 var invalidAttempt=0;
 var isiOS=/iPhone|iPad/i.test(navigator.userAgent);
 var isTencent=/(MicroMessenger|QQ)\//i.test(navigator.userAgent);
-var login={
-	"email":localStorage.getItem("Email"),
-	"token":localStorage.getItem("Token"),
-	"username":localStorage.getItem("Username")
-};
-var newScript=document.createElement("script");
 var orderSubmitted=localStorage.getItem("orderSubmitted");
 var settings={};
 var title=document.title;
@@ -510,9 +502,6 @@ function loadServerList(auto){
 }
 function loggedIn(newLogin){
 	if(newLogin){
-		localStorage.setItem("Email",login.email);
-		localStorage.setItem("Token",login.token);
-		localStorage.setItem("Username",login.username);
 		closePopup("popLogin");
 		if(id("filesTip")){
 			id("filesTip").innerText=login.email;
@@ -862,6 +851,15 @@ function loggedIn(newLogin){
 			settings=data;
 		}
 	});
+}
+function multilang(json){
+	if(chs){
+		return json["zh-CN"];
+	}else if(zh){
+		return json["zh-TW"];
+	}else{
+		return json["en-US"];
+	}
 }
 function notify(content,duration){
 	var newDiv=document.createElement("div");
@@ -1257,12 +1255,7 @@ menuItemLogin.onclick=function(){
 			"zh-CN":"正在退出登录……",
 			"zh-TW":"正在登出……"
 		}),false);
-		var ssoIFrame=document.createElement("iframe");
-		ssoIFrame.style.display="none";
-		ssoIFrame.src="https://account.rthsoftware.cn/sso.html?"+encodeData({
-			"action":"logout"
-		});
-		document.body.appendChild(ssoIFrame);
+		logOut();
 	}else{
 		var btnCloseId="btnClose"+new Date().getTime();
 		showPopup([
@@ -1525,25 +1518,6 @@ menuItemSelectServer.onclick=function(){
 	menuServers.style.display="";
 	menuServers.style.marginLeft="0px";
 };
-addEventListener("message",function(e){
-	try{
-		login=JSON.parse(atob(e.data));
-		if(login.username===null){
-			localStorage.clear();
-			location.reload();
-		}else{
-			loggedIn(true);
-		}
-	}catch(e){}
-});
-if(login.username){
-	loggedIn();
-}else{
-	var ssoIFrame=document.createElement("iframe");
-	ssoIFrame.style.display="none";
-	ssoIFrame.src="https://account.rthsoftware.cn/sso.html";
-	document.body.appendChild(ssoIFrame);
-}
 var uploader=new plupload.Uploader({
 	"runtimes":"html5",
 	"browse_button":"send",
@@ -1718,18 +1692,6 @@ if(tmpCode){
 		}
 	}
 }
-newScript.src="https://api.rthsoftware.cn/backend/code?"+encodeData({
-	"appname":appName,
-	"lang":navigator.language,
-	"referrer":document.referrer,
-	"token":login.token,
-	"username":login.username,
-	"ver":version
-});
-newScript.onload=function(){
-	document.body.removeChild(newScript);
-}
-document.body.appendChild(newScript);
 if(chs){
 	txtVer.innerText="闽ICP备18016273号";
 	txtVer.onclick=function(){

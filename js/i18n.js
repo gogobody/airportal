@@ -1,3 +1,5 @@
+var chs=/zh-cn|zh-hans|zh-hans-cn/i.test(navigator.language);
+var zh=navigator.language.indexOf("zh")!=-1;
 try{
 	if(!chs){
 		var mrxLink=document.createElement("a");
@@ -8,6 +10,7 @@ try{
 		yszLink.href="https://www.yangshangzhen.com/";
 		mrxLink.target=yszLink.target="_blank";
 		if(!zh){
+			document.getElementsByTagName("html")[0].lang="en-US";
 			send.innerText="Send";
 			send.title="Right click to send text";
 			receive.innerText="Receive";
@@ -26,6 +29,7 @@ try{
 			menuItemFeedback.innerText="Contact Us";
 			nameSelectServer.innerText="Select Server";
 		}else{
+			document.getElementsByTagName("html")[0].lang="zh-TW";
 			send.innerText="發送";
 			send.title="右鍵單擊發送文字";
 			receive.innerText="接收";
