@@ -1,4 +1,4 @@
-var version="19w35a";
+var version="19w35a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -28,10 +28,10 @@ var _paq=[
 	["setTrackerUrl","https://api.rthsoftware.cn/stat/matomo"],
 	["trackPageView"]
 ];
-if(!firstRun||firstRun[version]==undefined){
+if(!firstRun||firstRun[version]===undefined){
 	firstRun={};
 }
-if(firstRun[version]!=false){
+if(firstRun[version]!==false){
 	firstRun[version]=false;
 	localStorage.setItem("firstRun",JSON.stringify(firstRun));
 	firstRun=true;
@@ -608,9 +608,7 @@ function loggedIn(newLogin){
 			"zh-CN":"一年",
 			"zh-TW":"一年"
 		});
-		id("payItem1M").onclick=
-		id("payItem3M").onclick=
-		id("payItem1Y").onclick=function(){
+		id("payItem1M").onclick=id("payItem3M").onclick=id("payItem1Y").onclick=function(){
 			payItemClick(this,"plan");
 		};
 		id("paymentMethod").innerText=multilang({
@@ -633,9 +631,7 @@ function loggedIn(newLogin){
 			"zh-CN":"确认支付",
 			"zh-TW":"確認支付"
 		});
-		id("payItemAli").onclick=
-		id("payItemWechat").onclick=
-		id("payItemPaypal").onclick=function(){
+		id("payItemAli").onclick=id("payItemWechat").onclick=id("payItemPaypal").onclick=function(){
 			payItemClick(this,"method");
 		};
 		Object.keys(window.info.price).forEach(function(key){
@@ -1255,7 +1251,9 @@ menuItemLogin.onclick=function(){
 			"zh-CN":"正在退出登录……",
 			"zh-TW":"正在登出……"
 		}),false);
-		logOut();
+		logOut(function(){
+			localStorage.clear();
+		});
 	}else{
 		var btnCloseId="btnClose"+new Date().getTime();
 		showPopup([
