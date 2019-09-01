@@ -12,7 +12,6 @@ try{
 		if(!zh){
 			document.getElementsByTagName("html")[0].lang="en-US";
 			send.innerText="Send";
-			send.title="Right click to send text";
 			receive.innerText="Receive";
 			privacyPolicy.innerText="Privacy Policy";
 			footerR.innerHTML="Developed by";
@@ -31,7 +30,6 @@ try{
 		}else{
 			document.getElementsByTagName("html")[0].lang="zh-TW";
 			send.innerText="發送";
-			send.title="右鍵單擊發送文字";
 			receive.innerText="接收";
 			privacyPolicy.innerText="隱私政策";
 			footerR.innerHTML="由";

@@ -1,4 +1,4 @@
-var version="19w35a1";
+var version="19w36a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -16,7 +16,9 @@ var $_GET=(function(){
 var chunkSize=100*1048576;
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 var invalidAttempt=0;
+var isAndroid=/Android/i.test(navigator.userAgent);
 var isiOS=/iPhone|iPad/i.test(navigator.userAgent);
+var isMobile=isAndroid||isiOS;
 var isTencent=/(MicroMessenger|QQ)\//i.test(navigator.userAgent);
 var orderSubmitted=localStorage.getItem("orderSubmitted");
 var settings={};
@@ -45,12 +47,24 @@ function btnPay0State(){
 		btnPay0.style.opacity="0.5";
 	}
 }
-function clearNotification(){
-	var notificationBar=document.getElementsByClassName("notificationBar");
-	if(notificationBar.length>0){
-		for(var i=0;i<notificationBar.length;i++){
-			notificationBar[i].parentElement.removeChild(notificationBar[i]);
-		}
+function clearClass(className){
+	var elements=document.getElementsByClassName(className);
+	for(var i=0;i<elements.length;i++){
+		elements[i].parentElement.removeChild(elements[i]);
+	}
+}
+function closeMenu(){
+	mask.style.display="none";
+	if(document.getElementsByClassName("popup-menu")[0]){
+		document.getElementsByClassName("popup-menu")[0].style.opacity="0";
+		setTimeout(function(){
+			clearClass("popup-menu");
+		},250);
+	}else{
+		menu.style.opacity="0";
+		setTimeout(function(){
+			menu.style.display="none";
+		},250);
 	}
 }
 function closePopup(elementId,animation){
@@ -403,13 +417,6 @@ function getRandCharacter(len){
 	}
 	return str;
 }
-function hideMenu(){
-	mask.style.display="none";
-	menu.style.opacity="0";
-	setTimeout(function(){
-		menu.style.display="none";
-	},250);
-}
 function id(elementId){
 	return document.getElementById(elementId);
 }
@@ -488,7 +495,7 @@ function loadServerList(auto){
 					}
 				}
 			}
-			hideMenu();
+			closeMenu();
 		};
 		newTick.classList.add("tick");
 		if(key==auto){
@@ -825,7 +832,7 @@ function loggedIn(newLogin){
 				});
 			};
 		};
-		hideMenu();
+		closeMenu();
 	};
 	newItem.style.fontSize="small";
 	newItem.innerText=login.email;
@@ -864,14 +871,18 @@ function notify(content,duration){
 		duration=3000;
 	}
 	newDiv.innerText=content;
-	newDiv.onclick=clearNotification;
+	newDiv.onclick=function(){
+		clearClass("notificationBar");
+	};
 	document.body.appendChild(newDiv);
 	setTimeout(function(){
 		newDiv.style.bottom="0px";
 		if(duration){
 			setTimeout(function(){
 				newDiv.style.bottom="-50px";
-				setTimeout(clearNotification,250);
+				setTimeout(function(){
+					clearClass("notificationBar");
+				},250);
 			},duration);
 		}
 	},25);
@@ -913,6 +924,29 @@ function showChangelog(text,firstRunOnly){
 			closePopup("popUpdate");
 		};
 	}
+}
+function showMenu(e,menu){
+	clearClass("popup-menu");
+	var newDiv=document.createElement("div");
+	newDiv.classList.add("popup-menu");
+	mask.style.display="block";
+	newDiv.oncontextmenu=function(){
+		return false;
+	};
+	for(var i=0;i<menu.length;i++){
+		if(menu[i].if===undefined||menu[i].if){
+			var newSpan=document.createElement("span");
+			newSpan.innerText=menu[i].text;
+			newSpan.onclick=menu[i].onclick;
+			newDiv.appendChild(newSpan);
+		}
+	}
+	document.body.appendChild(newDiv);
+	newDiv.style.left=(e.x-newDiv.offsetWidth/2)+"px";
+	newDiv.style.top=(e.y-newDiv.offsetHeight)+"px";
+	setTimeout(function(){
+		newDiv.style.opacity="1";
+	},25);
 }
 function showPopup(html,elementId,parentId,animation){
 	if(!id(parentId)){
@@ -1116,59 +1150,81 @@ function uploadSuccess(code){
 		},2250);
 	};
 }
-send.oncontextmenu=function(){
-	var btnCloseId="btnClose"+new Date().getTime();
-	showPopup([
-		'<span class="btnClose" id="'+btnCloseId+'"></span>',
-		'<p id="titleSendText" class="p1"></p>',
-		'<textarea id="txtSend" placeholder=""></textarea>',
-		'<button class="btn1" id="btnSendText"></button>'
-	],"sendBox0","popSend","rebound");
-	id("titleSendText").innerText=multilang({
-		"en-US":"Send Text",
-		"zh-CN":"发送文本",
-		"zh-TW":"發送文字"
-	});
-	id("txtSend").placeholder=multilang({
-		"en-US":"Enter the plain text here",
-		"zh-CN":"在这里输入纯文本",
-		"zh-TW":"在這裡輸入純文字"
-	});
-	id("btnSendText").innerText=multilang({
-		"en-US":"Send",
-		"zh-CN":"发送",
-		"zh-TW":"發送"
-	});
-	id(btnCloseId).onclick=function(){
-		closePopup("popSend");
-	};
-	id("btnSendText").onclick=function(){
-		var value=id("txtSend").value;
-		if(value){
-			id("btnSendText").disabled=true;
-			fetch("https://api.rthsoftware.cn/backend/airportal/getcode",getPostData({
-				"text":value,
-				"token":login.token,
-				"username":login.username
-			})).then(function(response){
-				id("btnSendText").disabled=false;
-				if(response.ok||response.status==200){
-					return response.json();
-				}else{
-					error(response);
-				}
-			}).then(function(data){
-				if(data){
-					if(data.alert){
-						alert(data.alert);
-					}else{
-						uploadSuccess(data.code);
-					}
-				}
+send.oncontextmenu=function(e){
+	showMenu(e,[{
+		"onclick":function(){
+			var btnCloseId="btnClose"+new Date().getTime();
+			showPopup([
+				'<span class="btnClose" id="'+btnCloseId+'"></span>',
+				'<p id="titleSendText" class="p1"></p>',
+				'<textarea id="txtSend" placeholder=""></textarea>',
+				'<button class="btn1" id="btnSendText"></button>'
+			],"sendBox0","popSend","rebound");
+			id("titleSendText").innerText=multilang({
+				"en-US":"Send Text",
+				"zh-CN":"发送文本",
+				"zh-TW":"發送文字"
 			});
-		}
-	};
-	id("txtSend").focus();
+			id("txtSend").placeholder=multilang({
+				"en-US":"Enter the plain text here",
+				"zh-CN":"在这里输入纯文本",
+				"zh-TW":"在這裡輸入純文字"
+			});
+			id("btnSendText").innerText=multilang({
+				"en-US":"Send",
+				"zh-CN":"发送",
+				"zh-TW":"發送"
+			});
+			id(btnCloseId).onclick=function(){
+				closePopup("popSend");
+			};
+			id("btnSendText").onclick=function(){
+				var value=id("txtSend").value;
+				if(value){
+					id("btnSendText").disabled=true;
+					fetch("https://api.rthsoftware.cn/backend/airportal/getcode",getPostData({
+						"text":value,
+						"token":login.token,
+						"username":login.username
+					})).then(function(response){
+						id("btnSendText").disabled=false;
+						if(response.ok||response.status==200){
+							return response.json();
+						}else{
+							error(response);
+						}
+					}).then(function(data){
+						if(data){
+							if(data.alert){
+								alert(data.alert);
+							}else{
+								uploadSuccess(data.code);
+							}
+						}
+					});
+				}
+			};
+			id("txtSend").focus();
+			closeMenu();
+		},
+		"text":multilang({
+			"en-US":"Text",
+			"zh-CN":"文本",
+			"zh-TW":"文字"
+		})
+	},{
+		"if":!isMobile,
+		"onclick":function(){
+			inputFile.value="";
+			inputFile.click();
+			closeMenu();
+		},
+		"text":multilang({
+			"en-US":"Folder",
+			"zh-CN":"文件夹",
+			"zh-TW":"資料夾"
+		})
+	}]);
 	return false;
 };
 receive.onclick=function(){
@@ -1243,7 +1299,7 @@ menuIcon.onclick=function(){
 	menuServers.style.display="none";
 	menuServers.style.marginLeft="200%";
 };
-mask.onclick=hideMenu;
+mask.onclick=closeMenu;
 menuItemLogin.onclick=function(){
 	if(login.username){
 		notify(multilang({
@@ -1264,7 +1320,7 @@ menuItemLogin.onclick=function(){
 			closePopup("popLogin");
 		};
 	}
-	hideMenu();
+	closeMenu();
 };
 menuItemHistory.onclick=function(){
 	showPopup([
@@ -1370,7 +1426,7 @@ menuItemHistory.onclick=function(){
 		"token":login.token,
 		"username":login.username
 	})).then(loadHistory).catch(loadHistory);
-	hideMenu();
+	closeMenu();
 };
 menuItemSettings.onclick=function(){
 	showPopup([
@@ -1430,7 +1486,7 @@ menuItemSettings.onclick=function(){
 	id("btnDone5").onclick=function(){
 		closePopup("popSettings");
 	};
-	hideMenu();
+	closeMenu();
 };
 menuItemFeedback.onclick=function(){
 	var btnCloseId="btnClose"+new Date().getTime();
@@ -1508,13 +1564,16 @@ menuItemFeedback.onclick=function(){
 	id(btnCloseId).onclick=function(){
 		closePopup("popFeedback");
 	};
-	hideMenu();
+	closeMenu();
 };
 menuItemSelectServer.onclick=function(){
 	this.style.position="absolute";
 	this.style.marginLeft="-100%";
 	menuServers.style.display="";
 	menuServers.style.marginLeft="0px";
+};
+inputFile.onchange=function(){
+	uploader.addFile(this);
 };
 var uploader=new plupload.Uploader({
 	"runtimes":"html5",
