@@ -1,4 +1,4 @@
-var version="19w36a";
+var version="19w36a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -950,6 +950,7 @@ function showMenu(e,menu){
 }
 function showPopup(html,elementId,parentId,animation){
 	if(!id(parentId)){
+		clearClass("popup-menu");
 		var newParent=document.createElement("div");
 		newParent.classList.add("popUp");
 		newParent.id=parentId;
@@ -1205,7 +1206,6 @@ send.oncontextmenu=function(e){
 				}
 			};
 			id("txtSend").focus();
-			closeMenu();
 		},
 		"text":multilang({
 			"en-US":"Text",
