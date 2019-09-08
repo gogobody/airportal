@@ -749,7 +749,7 @@ textarea:focus {
 	width: 80%;
 	width: max-content;
 }
-.footer {
+footer {
 	position: absolute;
 	bottom: 18px;
 	font-size: 12px;
@@ -898,7 +898,6 @@ textarea {
 	left: 30px;
 }
 #footerR {
-	width: 300px;
 	right: 30px;
 	text-align: right;
 }
