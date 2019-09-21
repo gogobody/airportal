@@ -1,4 +1,4 @@
-var version="19w39a";
+var version="19w39a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -1266,7 +1266,7 @@ receive.onclick=function(){
 				"en-US":"You have entered invalid codes many times. Please enter the verification code to continue: ",
 				"zh-CN":"您已经多次输入了无效取件码。请输入验证码以继续：",
 				"zh-TW":"您已經多次輸入了無效取件碼。請輸入驗證碼以繼續："
-			})+code);
+			})+code,"");
 			if(enteredCode==code){
 				getInfo(id("inputCode").value);
 			}else if(enteredCode!==null){
@@ -1530,7 +1530,7 @@ menuItemFeedback.onclick=function(){
 				"en-US":"Please enter your email address.",
 				"zh-CN":"请输入您的电子邮箱地址。",
 				"zh-TW":"請輸入您的電子郵箱地址。"
-			}));
+			}),"");
 			if(emailPattern.test(email)){
 				fetch("https://api.rthsoftware.cn/backend/feedback",getPostData({
 					"appname":appName,
@@ -1738,6 +1738,12 @@ if(parseInt($_GET["code"])>=1000&&parseInt($_GET["code"])<=999999){
 		localStorage.setItem("code",$_GET["code"]);
 		location.href="/";
 	}
+}else if(/MSIE|Trident/i.test(navigator.userAgent)&&confirm(multilang({
+	"en-US":"Please upgrade your web browser.",
+	"zh-CN":"请升级您的网络浏览器。",
+	"zh-TW":"請升級您的網路瀏覽器。"
+}))){
+	location.href="https://www.google.cn/chrome/";
 }
 if(tmpCode){
 	localStorage.removeItem("code");
