@@ -1,4 +1,4 @@
-var version="19w40a3";
+var version="19w40a4";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -651,7 +651,6 @@ function loggedIn(newLogin){
 				id("price-"+key).innerHTML="";
 				var newP=document.createElement("p");
 				newP.classList.add("p2");
-				window.info.price[key]["actualPrice"]=window.info.currency+window.info.price[key]["specialPrice"];
 				if(window.info.price[key]["specialPrice"]!=window.info.price[key]["price"]){
 					var newSpan=document.createElement("span");
 					newSpan.classList.add("pDel");
@@ -682,21 +681,20 @@ function loggedIn(newLogin){
 				});
 				var payPlan=document.getElementsByClassName("payItem plan selected").item(0).lastElementChild;
 				var payMethod=document.getElementsByClassName("payItem method selected").item(0).lastElementChild;
-				var actualPrice;
+				var selectedPlan;
 				var idPayPlan=payPlan.id;
 				var idPayMethod=payMethod.id;
 				pubPayPlan=payPlan.innerText;
 				pubPayMethod=payMethod.innerText;
-				var day=idPayPlan.replace("month","")*30;
-				switch(day){
-					case 30:
-					actualPrice=window.info.price.one.actualPrice;
+				switch(idPayPlan){
+					case "month1":
+					selectedPlan=window.info.price.one;
 					break;
-					case 90:
-					actualPrice=window.info.price.three.actualPrice;
+					case "month3":
+					selectedPlan=window.info.price.three;
 					break;
-					case 360:
-					actualPrice=window.info.price.twelve.actualPrice;
+					case "month12":
+					selectedPlan=window.info.price.twelve;
 					break;
 				}
 				id("payQRC").innerHTML="";
@@ -705,7 +703,7 @@ function loggedIn(newLogin){
 					case "wechatPay":
 					fetch("https://api.rthsoftware.cn/backend/pay",getPostData({
 						"appname":appName,
-						"fee":actualPrice.substring(1)*100,
+						"fee":selectedPlan.specialPrice*100,
 						"username":login.username
 					})).then(function(response){
 						if(response.ok||response.status==200){
@@ -718,17 +716,7 @@ function loggedIn(newLogin){
 					});
 					break;
 					case "alipay":
-					switch(day){
-						case 30:
-						qrcode.src=getQRCode(window.info.price.one.alipay);
-						break;
-						case 90:
-						qrcode.src=getQRCode(window.info.price.three.alipay);
-						break;
-						case 360:
-						qrcode.src=getQRCode(window.info.price.twelve.alipay);
-						break;
-					}
+					qrcode.src=getQRCode(selectedPlan.alipay);
 					break;
 					case "paypal":
 					qrcode.src=getQRCode("paypal://options_details_social_profile?id=MAKF55TE4NYKQ");
@@ -737,9 +725,9 @@ function loggedIn(newLogin){
 				}
 				id("payQRC").appendChild(qrcode);
 				lblPayTip.innerText=multilang({
-					"en-US":"Activate/Renew "+pubPayPlan+" of Premium Plan ("+actualPrice+")\nfor "+login.email+" with "+pubPayMethod,
-					"zh-CN":"使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号（"+actualPrice+"）",
-					"zh-TW":"使用 "+pubPayMethod+" 為 "+login.email+"\n啟用 / 續期"+pubPayPlan+"的高級賬號（"+actualPrice+"）"
+					"en-US":"Activate/Renew "+pubPayPlan+" of Premium Plan ("+window.info.currency+selectedPlan.specialPrice+")\nfor "+login.email+" with "+pubPayMethod,
+					"zh-CN":"使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号（"+window.info.currency+selectedPlan.specialPrice+"）",
+					"zh-TW":"使用 "+pubPayMethod+" 為 "+login.email+"\n啟用 / 續期"+pubPayPlan+"的高級賬號（"+window.info.currency+selectedPlan.specialPrice+"）"
 				});
 				accBox0.style.left="-500px";
 				accBox1.style.left="0px";
