@@ -1,4 +1,4 @@
-var version="19w40a4";
+var version="19w40a5";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -699,31 +699,16 @@ function loggedIn(newLogin){
 				}
 				id("payQRC").innerHTML="";
 				var qrcode=new Image(200,200);
-				switch(idPayMethod){
-					case "wechatPay":
-					fetch("https://api.rthsoftware.cn/backend/pay",getPostData({
-						"appname":appName,
-						"fee":selectedPlan.specialPrice*100,
-						"username":login.username
-					})).then(function(response){
-						if(response.ok||response.status==200){
-							return response.json();
-						}else{
-							error(response);
-						}
-					}).then(function(data){
-						qrcode.src=data["qrcode"];
-					});
-					break;
-					case "alipay":
-					qrcode.src=getQRCode(selectedPlan.alipay);
-					break;
-					case "paypal":
-					qrcode.src=getQRCode("paypal://options_details_social_profile?id=MAKF55TE4NYKQ");
-					open("https://www.paypal.me/ShangzhenY/");
-					break;
-				}
+				qrcode.src="https://api.rthsoftware.cn/backend/pay?"+encodeData({
+					"appname":appName,
+					"fee":selectedPlan.specialPrice*100,
+					"method":idPayMethod.toLowerCase(),
+					"username":login.username
+				})
 				id("payQRC").appendChild(qrcode);
+				if(idPayMethod=="paypal"){
+					open("https://www.paypal.me/ShangzhenY/");
+				}
 				lblPayTip.innerText=multilang({
 					"en-US":"Activate/Renew "+pubPayPlan+" of Premium Plan ("+window.info.currency+selectedPlan.specialPrice+")\nfor "+login.email+" with "+pubPayMethod,
 					"zh-CN":"使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号（"+window.info.currency+selectedPlan.specialPrice+"）",
