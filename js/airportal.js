@@ -1,4 +1,4 @@
-var version="19w39a1";
+var version="19w40a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -550,11 +550,11 @@ function loggedIn(newLogin){
 					'<p id="month12" class="p4"></p>',
 				'</span>',
 				'<p id="paymentMethod" class="p4" style="margin-top: 0px;"></p>',
+				'<span class="payItem method selected" id="payItemWechat">',
+					'<p id="wechatPay" class="p5"></p>',
+				'</span>',
 				'<span class="payItem method" id="payItemAli">',
 					'<p id="alipay" class="p5"></p>',
-				'</span>',
-				'<span class="payItem method" id="payItemWechat">',
-					'<p id="wechatPay" class="p5"></p>',
 				'</span>',
 				'<span class="payItem method" id="payItemPaypal">',
 					'<p id="paypal" class="p5">PayPal</p>',
@@ -623,23 +623,29 @@ function loggedIn(newLogin){
 			"zh-CN":"支付方式",
 			"zh-TW":"支付方式"
 		});
-		id("alipay").innerText=multilang({
-			"en-US":"AliPay",
-			"zh-CN":"支付宝",
-			"zh-TW":"支付寶"
-		});
 		id("wechatPay").innerText=multilang({
 			"en-US":"WeChat",
 			"zh-CN":"微信支付",
 			"zh-TW":"微信支付"
+		});
+		id("alipay").innerText=multilang({
+			"en-US":"AliPay",
+			"zh-CN":"支付宝",
+			"zh-TW":"支付寶"
 		});
 		id("btnPay0").innerText=multilang({
 			"en-US":"Pay",
 			"zh-CN":"确认支付",
 			"zh-TW":"確認支付"
 		});
-		id("payItemAli").onclick=id("payItemWechat").onclick=id("payItemPaypal").onclick=function(){
-			payItemClick(this,"method");
+		id("payItemWechat").onclick=id("payItemAli").onclick=id("payItemPaypal").onclick=function(){
+			if(this.id=="payItemWechat"||confirm(multilang({
+				"en-US":"Only orders paid via WeChat do not need to wait for manual confirmation. Are you sure that you want to change the payment method?",
+				"zh-CN":"只有微信支付不需要等待人工确认。确定要更改支付方式吗？",
+				"zh-TW":"只有微信支付不需要等待人工確認。確定要更改支付方式嗎？"
+			}))){
+				payItemClick(this,"method");
+			}
 		};
 		Object.keys(window.info.price).forEach(function(key){
 			id("price-"+key).innerHTML="";
@@ -681,56 +687,68 @@ function loggedIn(newLogin){
 			var idPayMethod=payMethod.id;
 			pubPayPlan=payPlan.innerText;
 			pubPayMethod=payMethod.innerText;
+			var day=idPayPlan.replace("month","")*30;
 			id("payQRC").innerHTML="";
 			var qrcode=new Image(200,200);
 			switch(idPayMethod){
+				case "wechatPay":
+				switch(day){
+					case 30:
+					actualPrice=window.info.price.one.actualPrice;
+					break;
+					case 90:
+					actualPrice=window.info.price.three.actualPrice;
+					break;
+					case 360:
+					actualPrice=window.info.price.twelve.actualPrice;
+					break;
+				}
+				fetch("https://api.rthsoftware.cn/backend/pay",getPostData({
+					"appname":appName,
+					"fee":actualPrice.substring(1)*100,
+					"username":login.username
+				})).then(function(response){
+					if(response.ok||response.status==200){
+						return response.json();
+					}else{
+						error(response);
+					}
+				}).then(function(data){
+					qrcode.src=data["qrcode"];
+				});
+				break;
 				case "alipay":
-				switch(idPayPlan){
-					case "month1":
+				switch(day){
+					case 30:
 					qrcode.src=getQRCode(window.info.price.one.alipay);
 					actualPrice=window.info.price.one.actualPrice;
 					break;
-					case "month3":
+					case 90:
 					qrcode.src=getQRCode(window.info.price.three.alipay);
 					actualPrice=window.info.price.three.actualPrice;
 					break;
-					case "month12":
+					case 360:
 					qrcode.src=getQRCode(window.info.price.twelve.alipay);
 					actualPrice=window.info.price.twelve.actualPrice;
 					break;
 				}
 				break;
-				case "wechatPay":
-				switch(idPayPlan){
-					case "month1":
-					qrcode.src=getQRCode(window.info.price.one.wechatpay);
-					actualPrice=window.info.price.one.actualPrice;
-					break;
-					case "month3":
-					qrcode.src=getQRCode(window.info.price.three.wechatpay);
-					actualPrice=window.info.price.three.actualPrice;
-					break;
-					case "month12":
-					qrcode.src=getQRCode(window.info.price.twelve.wechatpay);
-					actualPrice=window.info.price.twelve.actualPrice;
-					break;
-				}
-				break;
 				case "paypal":
-				switch(idPayPlan){
-					case "month1":
+				switch(day){
+					case 30:
 					qrcode.src=getQRCode(window.info.price.one.paypal);
 					actualPrice=window.info.price.one.actualPrice;
 					break;
-					case "month3":
+					case 90:
 					qrcode.src=getQRCode(window.info.price.three.paypal);
 					actualPrice=window.info.price.three.actualPrice;
 					break;
-					case "month12":
+					case 360:
 					qrcode.src=getQRCode(window.info.price.twelve.paypal);
 					actualPrice=window.info.price.twelve.actualPrice;
 					break;
 				}
+				open("https://www.paypal.me/ShangzhenY/");
 				break;
 			}
 			id("payQRC").appendChild(qrcode);
@@ -770,66 +788,77 @@ function loggedIn(newLogin){
 						id("btnPay1").onclick();
 					}
 				}
-				var action="续期";
-				if(!window.currentExpTime){
-					action="激活";
-				}
-				fetch("https://api.rthsoftware.cn/backend/feedback",getPostData({
-					"appname":appName,
-					"email":login.email,
-					"lang":navigator.language,
-					"name":login.username,
-					"text":"通过 "+pubPayMethod+" "+action+" "+pubPayPlan+" 的高级账号",
-					"ver":version
-				})).then(function(response){
-					if(response.ok||response.status==200){
-						payState="success";
-						id("btnDone3").innerText=multilang({
-							"en-US":"Close",
-							"zh-CN":"关闭",
-							"zh-TW":"關閉"
-						});
-						id("lblPayState0").innerText=multilang({
-							"en-US":"Submitted Successfully",
-							"zh-CN":"提交成功",
-							"zh-TW":"提交成功"
-						});
-						id("lblPayState1").innerText=multilang({
-							"en-US":"We are processing your order.\nThe number of days remaining will be automatically updated within 24 hours;\nif not, please contact us after making sure you have paid.",
-							"zh-CN":"我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新；\n如果24小时后仍没有更新，请在确保您已支付后与我们联系。",
-							"zh-TW":"我們正在處理您的支付訂單。\n您的高級賬號剩餘天數會在24小時內自動更新；\n如果24小時后仍沒有更新，請在確保您已支付后與我們聯繫。"
-						});
-						id("btnDone3").style.pointerEvents="auto";
-						id("btnDone3").style.opacity="1";
-						orderSubmitted=new Date().getTime();
-						localStorage.setItem("orderSubmitted",orderSubmitted);
-						loadExpTime();
-					}else{
-						payState="error";
-						id("btnDone3").innerText=multilang({
-							"en-US":"Try Again",
-							"zh-CN":"重试",
-							"zh-TW":"重試"
-						});
-						id("lblPayState0").innerText=multilang({
-							"en-US":"Oops... something went wrong",
-							"zh-CN":"Oops... 出错了",
-							"zh-TW":"Oops... 出錯了"
-						});
-						id("lblPayState1").innerText=multilang({
-							"en-US":"Unable to connect to the server.",
-							"zh-CN":"无法连接至服务器。",
-							"zh-TW":"無法連接至伺服器。"
-						});
-						id("lblPayState1").innerText+=multilang({
-							"en-US":"\nPlease try again (no need to pay again)\nIf you need more help, please contact us.",
-							"zh-CN":"\n请重试（无需再次扫码付款）\n如需更多帮助，请与我们联系。",
-							"zh-TW":"\n請重試（無需再次掃碼付款）\n如需更多幫助，請與我們聯繫。"
-						});
-						id("btnDone3").style.pointerEvents="auto";
-						id("btnDone3").style.opacity="1";
+				if(idPayMethod=="wechatPay"){
+					loadExpTime();
+					notify(multilang({
+						"en-US":"Submitted Successfully",
+						"zh-CN":"提交成功",
+						"zh-TW":"提交成功"
+					}));
+					closePopup("popAccount");
+					menuIcon.click();
+				}else{
+					var action="续期";
+					if(!window.currentExpTime){
+						action="激活";
 					}
-				});
+					fetch("https://api.rthsoftware.cn/backend/feedback",getPostData({
+						"appname":appName,
+						"email":login.email,
+						"lang":navigator.language,
+						"name":login.username,
+						"text":"通过 "+pubPayMethod+" "+action+" "+pubPayPlan+" 的高级账号",
+						"ver":version
+					})).then(function(response){
+						if(response.ok||response.status==200){
+							payState="success";
+							id("btnDone3").innerText=multilang({
+								"en-US":"Close",
+								"zh-CN":"关闭",
+								"zh-TW":"關閉"
+							});
+							id("lblPayState0").innerText=multilang({
+								"en-US":"Submitted Successfully",
+								"zh-CN":"提交成功",
+								"zh-TW":"提交成功"
+							});
+							id("lblPayState1").innerText=multilang({
+								"en-US":"We are processing your order.\nThe number of days remaining will be automatically updated within 24 hours;\nif not, please contact us after making sure you have paid.",
+								"zh-CN":"我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新；\n如果24小时后仍没有更新，请在确保您已支付后与我们联系。",
+								"zh-TW":"我們正在處理您的支付訂單。\n您的高級賬號剩餘天數會在24小時內自動更新；\n如果24小時后仍沒有更新，請在確保您已支付后與我們聯繫。"
+							});
+							id("btnDone3").style.pointerEvents="auto";
+							id("btnDone3").style.opacity="1";
+							orderSubmitted=new Date().getTime();
+							localStorage.setItem("orderSubmitted",orderSubmitted);
+							loadExpTime();
+						}else{
+							payState="error";
+							id("btnDone3").innerText=multilang({
+								"en-US":"Try Again",
+								"zh-CN":"重试",
+								"zh-TW":"重試"
+							});
+							id("lblPayState0").innerText=multilang({
+								"en-US":"Oops... something went wrong",
+								"zh-CN":"Oops... 出错了",
+								"zh-TW":"Oops... 出錯了"
+							});
+							id("lblPayState1").innerText=multilang({
+								"en-US":"Unable to connect to the server.",
+								"zh-CN":"无法连接至服务器。",
+								"zh-TW":"無法連接至伺服器。"
+							});
+							id("lblPayState1").innerText+=multilang({
+								"en-US":"\nPlease try again (no need to pay again)\nIf you need more help, please contact us.",
+								"zh-CN":"\n请重试（无需再次扫码付款）\n如需更多帮助，请与我们联系。",
+								"zh-TW":"\n請重試（無需再次掃碼付款）\n如需更多幫助，請與我們聯繫。"
+							});
+							id("btnDone3").style.pointerEvents="auto";
+							id("btnDone3").style.opacity="1";
+						}
+					});
+				}
 			};
 		};
 		closeMenu();
