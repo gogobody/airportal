@@ -1,4 +1,4 @@
-var version="19w40a1";
+var version="19w40a2";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -521,346 +521,348 @@ function loggedIn(newLogin){
 	var newItem=document.createElement("a");
 	newItem.classList.add("menuItem");
 	newItem.onclick=function(){
-		var btnCloseId="btnClose"+new Date().getTime();
-		showPopup([
-			'<span class="btnClose" id="'+btnCloseId+'"></span>',
-			'<p class="p1" id="lblUsername"></p>',
-				'<span class="line"></span>',
-			'<p class="p3" id="lblExpTime"></p>',
-			'<div class="payPlans">',
-				'<p class="p2">',
-					'<span id="activatePremium"></span>',
-					'<a class="link1" id="showPrivilege"></a>',
-				'</p>',
-				'<p class="p4">',
-					'<span id="plans"></span>',
-					'<span id="promotionText"></span>',
-				'</p>',
-				'<span class="payItem plan" id="payItem1M">',
-					'<span id="price-one"></span>',
-					'<p id="month1" class="p4"></p>',
-				'</span>',
-				'<span class="payItem plan" id="payItem3M">',
-					'<span id="price-three"></span>',
-					'<p id="month3" class="p4"></p>',
-				'</span>',
-				'<span class="payItem plan" id="payItem1Y">',
-					'<span id="price-twelve"></span>',
-					'<p id="month12" class="p4"></p>',
-				'</span>',
-				'<p id="paymentMethod" class="p4" style="margin-top: 0px;"></p>',
-				'<span class="payItem method selected" id="payItemWechat">',
-					'<p id="wechatPay" class="p5"></p>',
-				'</span>',
-				'<span class="payItem method" id="payItemAli">',
-					'<p id="alipay" class="p5"></p>',
-				'</span>',
-				'<span class="payItem method" id="payItemPaypal">',
-					'<p id="paypal" class="p5">PayPal</p>',
-				'</span>',
-			'</div>',
-			'<button class="btn1" id="btnPay0"></button>'
-		],"accBox0","popAccount");
-		id(btnCloseId).onclick=function(){
-			closePopup("popAccount");
-		};
-		id("lblUsername").innerText=login.email;
-		id("lblExpTime").innerText=privilegeStatus.innerText;
-		id("activatePremium").innerText=multilang({
-			"en-US":"Activate/Renew Premium Plan",
-			"zh-CN":"激活 / 续期高级账号",
-			"zh-TW":"啟用 / 續期高級賬號"
-		});
-		id("showPrivilege").innerText=multilang({
-			"en-US":"Why?",
-			"zh-CN":"高级账号有哪些特权？",
-			"zh-TW":"高級賬號有哪些特權？"
-		});
-		id("showPrivilege").onclick=function(){
+		if(window.info){
+			var btnCloseId="btnClose"+new Date().getTime();
 			showPopup([
-				'<span class="btnBack" id="btnBackPrivileges"></span>',
-				'<p id="titlePrivileges" class="p1"></p>',
-				'<span class="line"></span>',
-				'<p id="txtPrivileges" class="p3 contentLeftAligned"></p>'
-			],"accBox_1","popAccount","slideInFromLeft");
-			id("btnBackPrivileges").onclick=function(){
-				closePopup("accBox_1","slideOut");
-			}
-			id("titlePrivileges").innerText=multilang({
-				"en-US":"Privileges of Premium Plan",
-				"zh-CN":"高级账号特权",
-				"zh-TW":"高級賬號特權"
+				'<span class="btnClose" id="'+btnCloseId+'"></span>',
+				'<p class="p1" id="lblUsername"></p>',
+					'<span class="line"></span>',
+				'<p class="p3" id="lblExpTime"></p>',
+				'<div class="payPlans">',
+					'<p class="p2">',
+						'<span id="activatePremium"></span>',
+						'<a class="link1" id="showPrivilege"></a>',
+					'</p>',
+					'<p class="p4">',
+						'<span id="plans"></span>',
+						'<span id="promotionText"></span>',
+					'</p>',
+					'<span class="payItem plan" id="payItem1M">',
+						'<span id="price-one"></span>',
+						'<p id="month1" class="p4"></p>',
+					'</span>',
+					'<span class="payItem plan" id="payItem3M">',
+						'<span id="price-three"></span>',
+						'<p id="month3" class="p4"></p>',
+					'</span>',
+					'<span class="payItem plan" id="payItem1Y">',
+						'<span id="price-twelve"></span>',
+						'<p id="month12" class="p4"></p>',
+					'</span>',
+					'<p id="paymentMethod" class="p4" style="margin-top: 0px;"></p>',
+					'<span class="payItem method selected" id="payItemWechat">',
+						'<p id="wechatPay" class="p5"></p>',
+					'</span>',
+					'<span class="payItem method" id="payItemAli">',
+						'<p id="alipay" class="p5"></p>',
+					'</span>',
+					'<span class="payItem method" id="payItemPaypal">',
+						'<p id="paypal" class="p5">PayPal</p>',
+					'</span>',
+				'</div>',
+				'<button class="btn1" id="btnPay0"></button>'
+			],"accBox0","popAccount");
+			id(btnCloseId).onclick=function(){
+				closePopup("popAccount");
+			};
+			id("lblUsername").innerText=login.email;
+			id("lblExpTime").innerText=privilegeStatus.innerText;
+			id("activatePremium").innerText=multilang({
+				"en-US":"Activate/Renew Premium Plan",
+				"zh-CN":"激活 / 续期高级账号",
+				"zh-TW":"啟用 / 續期高級賬號"
 			});
-			id("txtPrivileges").innerText=window.info.privileges;
-		};
-		id("promotionText").innerText=window.info.promotion;
-		id("plans").innerHTML=multilang({
-			"en-US":"Plans",
-			"zh-CN":"支付方案",
-			"zh-TW":"支付方案"
-		});
-		id("month1").innerText=multilang({
-			"en-US":"1 Month",
-			"zh-CN":"一个月",
-			"zh-TW":"一個月"
-		});
-		id("month3").innerText=multilang({
-			"en-US":"3 Months",
-			"zh-CN":"三个月",
-			"zh-TW":"三個月"
-		});
-		id("month12").innerText=multilang({
-			"en-US":"1 Year",
-			"zh-CN":"一年",
-			"zh-TW":"一年"
-		});
-		id("payItem1M").onclick=id("payItem3M").onclick=id("payItem1Y").onclick=function(){
-			payItemClick(this,"plan");
-		};
-		id("paymentMethod").innerText=multilang({
-			"en-US":"Payment Method",
-			"zh-CN":"支付方式",
-			"zh-TW":"支付方式"
-		});
-		id("wechatPay").innerText=multilang({
-			"en-US":"WeChat",
-			"zh-CN":"微信支付",
-			"zh-TW":"微信支付"
-		});
-		id("alipay").innerText=multilang({
-			"en-US":"AliPay",
-			"zh-CN":"支付宝",
-			"zh-TW":"支付寶"
-		});
-		id("btnPay0").innerText=multilang({
-			"en-US":"Pay",
-			"zh-CN":"确认支付",
-			"zh-TW":"確認支付"
-		});
-		id("payItemWechat").onclick=id("payItemAli").onclick=id("payItemPaypal").onclick=function(){
-			if(this.id=="payItemWechat"||confirm(multilang({
-				"en-US":"Only orders paid via WeChat do not need to wait for manual confirmation. Are you sure that you want to change the payment method?",
-				"zh-CN":"只有微信支付不需要等待人工确认。确定要更改支付方式吗？",
-				"zh-TW":"只有微信支付不需要等待人工確認。確定要更改支付方式嗎？"
-			}))){
-				payItemClick(this,"method");
-			}
-		};
-		Object.keys(window.info.price).forEach(function(key){
-			id("price-"+key).innerHTML="";
-			var newP=document.createElement("p");
-			newP.classList.add("p2");
-			window.info.price[key]["actualPrice"]=window.info.currency+window.info.price[key]["specialPrice"];
-			if(window.info.price[key]["specialPrice"]!=window.info.price[key]["price"]){
-				var newSpan=document.createElement("span");
-				newSpan.classList.add("pDel");
-				newP.innerText=window.info.currency+window.info.price[key]["specialPrice"];
-				newSpan.innerText=window.info.currency+window.info.price[key]["price"];
-				newP.appendChild(newSpan);
-			}else{
-				newP.innerText=window.info.currency+window.info.price[key]["price"];
-			}
-			id("price-"+key).appendChild(newP);
-		});
-		var pubPayPlan="N/A";
-		var pubPayMethod="N/A";
-		id("btnPay0").onclick=function(){
-			showPopup([
-				'<p class="p3" id="lblPayTip">您正在为此用户激活 / 续期高级账号</p>',
-				'<div id="payQRC"></div>',
-				'<span class="btnBack" id="btnBackPay"></span>',
-				'<button class="btn1" id="btnPay1"></button>'
-			],"accBox1","popAccount","slideInFromRight");
-			id("btnBackPay").onclick=function(){
-				closePopup("accBox1","slideOut");
-			}
-			id("btnPay1").innerText=multilang({
-				"en-US":"I Have Paid",
-				"zh-CN":"我已支付",
-				"zh-TW":"我已支付"
+			id("showPrivilege").innerText=multilang({
+				"en-US":"Why?",
+				"zh-CN":"高级账号有哪些特权？",
+				"zh-TW":"高級賬號有哪些特權？"
 			});
-			var payPlan=document.getElementsByClassName("payItem plan selected").item(0).lastElementChild;
-			var payMethod=document.getElementsByClassName("payItem method selected").item(0).lastElementChild;
-			var actualPrice;
-			var idPayPlan=payPlan.id;
-			var idPayMethod=payMethod.id;
-			pubPayPlan=payPlan.innerText;
-			pubPayMethod=payMethod.innerText;
-			var day=idPayPlan.replace("month","")*30;
-			id("payQRC").innerHTML="";
-			var qrcode=new Image(200,200);
-			switch(idPayMethod){
-				case "wechatPay":
-				switch(day){
-					case 30:
-					actualPrice=window.info.price.one.actualPrice;
-					break;
-					case 90:
-					actualPrice=window.info.price.three.actualPrice;
-					break;
-					case 360:
-					actualPrice=window.info.price.twelve.actualPrice;
-					break;
-				}
-				fetch("https://api.rthsoftware.cn/backend/pay",getPostData({
-					"appname":appName,
-					"fee":actualPrice.substring(1)*100,
-					"username":login.username
-				})).then(function(response){
-					if(response.ok||response.status==200){
-						return response.json();
-					}else{
-						error(response);
-					}
-				}).then(function(data){
-					qrcode.src=data["qrcode"];
-				});
-				break;
-				case "alipay":
-				switch(day){
-					case 30:
-					qrcode.src=getQRCode(window.info.price.one.alipay);
-					actualPrice=window.info.price.one.actualPrice;
-					break;
-					case 90:
-					qrcode.src=getQRCode(window.info.price.three.alipay);
-					actualPrice=window.info.price.three.actualPrice;
-					break;
-					case 360:
-					qrcode.src=getQRCode(window.info.price.twelve.alipay);
-					actualPrice=window.info.price.twelve.actualPrice;
-					break;
-				}
-				break;
-				case "paypal":
-				switch(day){
-					case 30:
-					qrcode.src=getQRCode(window.info.price.one.paypal);
-					actualPrice=window.info.price.one.actualPrice;
-					break;
-					case 90:
-					qrcode.src=getQRCode(window.info.price.three.paypal);
-					actualPrice=window.info.price.three.actualPrice;
-					break;
-					case 360:
-					qrcode.src=getQRCode(window.info.price.twelve.paypal);
-					actualPrice=window.info.price.twelve.actualPrice;
-					break;
-				}
-				open("https://www.paypal.me/ShangzhenY/");
-				break;
-			}
-			id("payQRC").appendChild(qrcode);
-			lblPayTip.innerText=multilang({
-				"en-US":"Activate/Renew "+pubPayPlan+" of Premium Plan ("+actualPrice+")\nfor "+login.email+" with "+pubPayMethod,
-				"zh-CN":"使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号（"+actualPrice+"）",
-				"zh-TW":"使用 "+pubPayMethod+" 為 "+login.email+"\n啟用 / 續期"+pubPayPlan+"的高級賬號（"+actualPrice+"）"
-			});
-			accBox0.style.left="-500px";
-			accBox1.style.left="0px";
-			var payState="success";
-			id("btnPay1").onclick=function(){
+			id("showPrivilege").onclick=function(){
 				showPopup([
-					'<p class="p1" id="lblPayState0" style="margin-top: 50px;"></p>',
-					'<p class="p3" id="lblPayState1" style="margin-top: 50px;"></p>',
-					'<button class="btn1" id="btnDone3"></button>'
-				],"accBox2","popAccount","slideInFromRight");
-				id("lblPayState0").innerText=multilang({
-					"en-US":"Submitting",
-					"zh-CN":"提交中",
-					"zh-TW":"提交中"
-				});
-				id("lblPayState1").innerText=multilang({
-					"en-US":"We are processing your payment order\nPlease wait\nIf you need help, please contact us.",
-					"zh-CN":"我们正在处理您的支付订单\n请稍候\n如需帮助，请与我们联系。",
-					"zh-TW":"我們正在處理您的支付訂單\n請稍候\n如需幫助，請與我們聯繫。"
-				});
-				id("btnDone3").innerText=multilang({
-					"en-US":"Close",
-					"zh-CN":"关闭",
-					"zh-TW":"關閉"
-				});
-				id("btnDone3").onclick=function(){
-					if(payState=="success"){
-						closePopup("popAccount");
-					}else{
-						id("btnPay1").onclick();
-					}
+					'<span class="btnBack" id="btnBackPrivileges"></span>',
+					'<p id="titlePrivileges" class="p1"></p>',
+					'<span class="line"></span>',
+					'<p id="txtPrivileges" class="p3 contentLeftAligned"></p>'
+				],"accBox_1","popAccount","slideInFromLeft");
+				id("btnBackPrivileges").onclick=function(){
+					closePopup("accBox_1","slideOut");
 				}
-				if(idPayMethod=="wechatPay"){
-					loadExpTime();
-					notify(multilang({
-						"en-US":"Submitted Successfully",
-						"zh-CN":"提交成功",
-						"zh-TW":"提交成功"
-					}));
-					closePopup("popAccount");
-					menuIcon.click();
-				}else{
-					var action="续期";
-					if(!window.currentExpTime){
-						action="激活";
-					}
-					fetch("https://api.rthsoftware.cn/backend/feedback",getPostData({
-						"appname":appName,
-						"email":login.email,
-						"lang":navigator.language,
-						"name":login.username,
-						"text":"通过 "+pubPayMethod+" "+action+" "+pubPayPlan+" 的高级账号",
-						"ver":version
-					})).then(function(response){
-						if(response.ok||response.status==200){
-							payState="success";
-							id("btnDone3").innerText=multilang({
-								"en-US":"Close",
-								"zh-CN":"关闭",
-								"zh-TW":"關閉"
-							});
-							id("lblPayState0").innerText=multilang({
-								"en-US":"Submitted Successfully",
-								"zh-CN":"提交成功",
-								"zh-TW":"提交成功"
-							});
-							id("lblPayState1").innerText=multilang({
-								"en-US":"We are processing your order.\nThe number of days remaining will be automatically updated within 24 hours;\nif not, please contact us after making sure you have paid.",
-								"zh-CN":"我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新；\n如果24小时后仍没有更新，请在确保您已支付后与我们联系。",
-								"zh-TW":"我們正在處理您的支付訂單。\n您的高級賬號剩餘天數會在24小時內自動更新；\n如果24小時后仍沒有更新，請在確保您已支付后與我們聯繫。"
-							});
-							id("btnDone3").style.pointerEvents="auto";
-							id("btnDone3").style.opacity="1";
-							orderSubmitted=new Date().getTime();
-							localStorage.setItem("orderSubmitted",orderSubmitted);
-							loadExpTime();
-						}else{
-							payState="error";
-							id("btnDone3").innerText=multilang({
-								"en-US":"Try Again",
-								"zh-CN":"重试",
-								"zh-TW":"重試"
-							});
-							id("lblPayState0").innerText=multilang({
-								"en-US":"Oops... something went wrong",
-								"zh-CN":"Oops... 出错了",
-								"zh-TW":"Oops... 出錯了"
-							});
-							id("lblPayState1").innerText=multilang({
-								"en-US":"Unable to connect to the server.",
-								"zh-CN":"无法连接至服务器。",
-								"zh-TW":"無法連接至伺服器。"
-							});
-							id("lblPayState1").innerText+=multilang({
-								"en-US":"\nPlease try again (no need to pay again)\nIf you need more help, please contact us.",
-								"zh-CN":"\n请重试（无需再次扫码付款）\n如需更多帮助，请与我们联系。",
-								"zh-TW":"\n請重試（無需再次掃碼付款）\n如需更多幫助，請與我們聯繫。"
-							});
-							id("btnDone3").style.pointerEvents="auto";
-							id("btnDone3").style.opacity="1";
-						}
-					});
+				id("titlePrivileges").innerText=multilang({
+					"en-US":"Privileges of Premium Plan",
+					"zh-CN":"高级账号特权",
+					"zh-TW":"高級賬號特權"
+				});
+				id("txtPrivileges").innerText=window.info.privileges;
+			};
+			id("promotionText").innerText=window.info.promotion;
+			id("plans").innerHTML=multilang({
+				"en-US":"Plans",
+				"zh-CN":"支付方案",
+				"zh-TW":"支付方案"
+			});
+			id("month1").innerText=multilang({
+				"en-US":"1 Month",
+				"zh-CN":"一个月",
+				"zh-TW":"一個月"
+			});
+			id("month3").innerText=multilang({
+				"en-US":"3 Months",
+				"zh-CN":"三个月",
+				"zh-TW":"三個月"
+			});
+			id("month12").innerText=multilang({
+				"en-US":"1 Year",
+				"zh-CN":"一年",
+				"zh-TW":"一年"
+			});
+			id("payItem1M").onclick=id("payItem3M").onclick=id("payItem1Y").onclick=function(){
+				payItemClick(this,"plan");
+			};
+			id("paymentMethod").innerText=multilang({
+				"en-US":"Payment Method",
+				"zh-CN":"支付方式",
+				"zh-TW":"支付方式"
+			});
+			id("wechatPay").innerText=multilang({
+				"en-US":"WeChat",
+				"zh-CN":"微信支付",
+				"zh-TW":"微信支付"
+			});
+			id("alipay").innerText=multilang({
+				"en-US":"AliPay",
+				"zh-CN":"支付宝",
+				"zh-TW":"支付寶"
+			});
+			id("btnPay0").innerText=multilang({
+				"en-US":"Pay",
+				"zh-CN":"确认支付",
+				"zh-TW":"確認支付"
+			});
+			id("payItemWechat").onclick=id("payItemAli").onclick=id("payItemPaypal").onclick=function(){
+				if(this.id=="payItemWechat"||confirm(multilang({
+					"en-US":"Only orders paid via WeChat do not need to wait for manual confirmation. Are you sure that you want to change the payment method?",
+					"zh-CN":"只有微信支付不需要等待人工确认。确定要更改支付方式吗？",
+					"zh-TW":"只有微信支付不需要等待人工確認。確定要更改支付方式嗎？"
+				}))){
+					payItemClick(this,"method");
 				}
 			};
-		};
-		closeMenu();
+			Object.keys(window.info.price).forEach(function(key){
+				id("price-"+key).innerHTML="";
+				var newP=document.createElement("p");
+				newP.classList.add("p2");
+				window.info.price[key]["actualPrice"]=window.info.currency+window.info.price[key]["specialPrice"];
+				if(window.info.price[key]["specialPrice"]!=window.info.price[key]["price"]){
+					var newSpan=document.createElement("span");
+					newSpan.classList.add("pDel");
+					newP.innerText=window.info.currency+window.info.price[key]["specialPrice"];
+					newSpan.innerText=window.info.currency+window.info.price[key]["price"];
+					newP.appendChild(newSpan);
+				}else{
+					newP.innerText=window.info.currency+window.info.price[key]["price"];
+				}
+				id("price-"+key).appendChild(newP);
+			});
+			var pubPayPlan="N/A";
+			var pubPayMethod="N/A";
+			id("btnPay0").onclick=function(){
+				showPopup([
+					'<p class="p3" id="lblPayTip">您正在为此用户激活 / 续期高级账号</p>',
+					'<div id="payQRC"></div>',
+					'<span class="btnBack" id="btnBackPay"></span>',
+					'<button class="btn1" id="btnPay1"></button>'
+				],"accBox1","popAccount","slideInFromRight");
+				id("btnBackPay").onclick=function(){
+					closePopup("accBox1","slideOut");
+				}
+				id("btnPay1").innerText=multilang({
+					"en-US":"I Have Paid",
+					"zh-CN":"我已支付",
+					"zh-TW":"我已支付"
+				});
+				var payPlan=document.getElementsByClassName("payItem plan selected").item(0).lastElementChild;
+				var payMethod=document.getElementsByClassName("payItem method selected").item(0).lastElementChild;
+				var actualPrice;
+				var idPayPlan=payPlan.id;
+				var idPayMethod=payMethod.id;
+				pubPayPlan=payPlan.innerText;
+				pubPayMethod=payMethod.innerText;
+				var day=idPayPlan.replace("month","")*30;
+				id("payQRC").innerHTML="";
+				var qrcode=new Image(200,200);
+				switch(idPayMethod){
+					case "wechatPay":
+					switch(day){
+						case 30:
+						actualPrice=window.info.price.one.actualPrice;
+						break;
+						case 90:
+						actualPrice=window.info.price.three.actualPrice;
+						break;
+						case 360:
+						actualPrice=window.info.price.twelve.actualPrice;
+						break;
+					}
+					fetch("https://api.rthsoftware.cn/backend/pay",getPostData({
+						"appname":appName,
+						"fee":actualPrice.substring(1)*100,
+						"username":login.username
+					})).then(function(response){
+						if(response.ok||response.status==200){
+							return response.json();
+						}else{
+							error(response);
+						}
+					}).then(function(data){
+						qrcode.src=data["qrcode"];
+					});
+					break;
+					case "alipay":
+					switch(day){
+						case 30:
+						qrcode.src=getQRCode(window.info.price.one.alipay);
+						actualPrice=window.info.price.one.actualPrice;
+						break;
+						case 90:
+						qrcode.src=getQRCode(window.info.price.three.alipay);
+						actualPrice=window.info.price.three.actualPrice;
+						break;
+						case 360:
+						qrcode.src=getQRCode(window.info.price.twelve.alipay);
+						actualPrice=window.info.price.twelve.actualPrice;
+						break;
+					}
+					break;
+					case "paypal":
+					switch(day){
+						case 30:
+						qrcode.src=getQRCode(window.info.price.one.paypal);
+						actualPrice=window.info.price.one.actualPrice;
+						break;
+						case 90:
+						qrcode.src=getQRCode(window.info.price.three.paypal);
+						actualPrice=window.info.price.three.actualPrice;
+						break;
+						case 360:
+						qrcode.src=getQRCode(window.info.price.twelve.paypal);
+						actualPrice=window.info.price.twelve.actualPrice;
+						break;
+					}
+					open("https://www.paypal.me/ShangzhenY/");
+					break;
+				}
+				id("payQRC").appendChild(qrcode);
+				lblPayTip.innerText=multilang({
+					"en-US":"Activate/Renew "+pubPayPlan+" of Premium Plan ("+actualPrice+")\nfor "+login.email+" with "+pubPayMethod,
+					"zh-CN":"使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号（"+actualPrice+"）",
+					"zh-TW":"使用 "+pubPayMethod+" 為 "+login.email+"\n啟用 / 續期"+pubPayPlan+"的高級賬號（"+actualPrice+"）"
+				});
+				accBox0.style.left="-500px";
+				accBox1.style.left="0px";
+				var payState="success";
+				id("btnPay1").onclick=function(){
+					showPopup([
+						'<p class="p1" id="lblPayState0" style="margin-top: 50px;"></p>',
+						'<p class="p3" id="lblPayState1" style="margin-top: 50px;"></p>',
+						'<button class="btn1" id="btnDone3"></button>'
+					],"accBox2","popAccount","slideInFromRight");
+					id("lblPayState0").innerText=multilang({
+						"en-US":"Submitting",
+						"zh-CN":"提交中",
+						"zh-TW":"提交中"
+					});
+					id("lblPayState1").innerText=multilang({
+						"en-US":"We are processing your payment order\nPlease wait\nIf you need help, please contact us.",
+						"zh-CN":"我们正在处理您的支付订单\n请稍候\n如需帮助，请与我们联系。",
+						"zh-TW":"我們正在處理您的支付訂單\n請稍候\n如需幫助，請與我們聯繫。"
+					});
+					id("btnDone3").innerText=multilang({
+						"en-US":"Close",
+						"zh-CN":"关闭",
+						"zh-TW":"關閉"
+					});
+					id("btnDone3").onclick=function(){
+						if(payState=="success"){
+							closePopup("popAccount");
+						}else{
+							id("btnPay1").onclick();
+						}
+					}
+					if(idPayMethod=="wechatPay"){
+						loadExpTime();
+						notify(multilang({
+							"en-US":"Submitted Successfully",
+							"zh-CN":"提交成功",
+							"zh-TW":"提交成功"
+						}));
+						closePopup("popAccount");
+						menuIcon.click();
+					}else{
+						var action="续期";
+						if(!window.currentExpTime){
+							action="激活";
+						}
+						fetch("https://api.rthsoftware.cn/backend/feedback",getPostData({
+							"appname":appName,
+							"email":login.email,
+							"lang":navigator.language,
+							"name":login.username,
+							"text":"通过 "+pubPayMethod+" "+action+" "+pubPayPlan+" 的高级账号",
+							"ver":version
+						})).then(function(response){
+							if(response.ok||response.status==200){
+								payState="success";
+								id("btnDone3").innerText=multilang({
+									"en-US":"Close",
+									"zh-CN":"关闭",
+									"zh-TW":"關閉"
+								});
+								id("lblPayState0").innerText=multilang({
+									"en-US":"Submitted Successfully",
+									"zh-CN":"提交成功",
+									"zh-TW":"提交成功"
+								});
+								id("lblPayState1").innerText=multilang({
+									"en-US":"We are processing your order.\nThe number of days remaining will be automatically updated within 24 hours;\nif not, please contact us after making sure you have paid.",
+									"zh-CN":"我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新；\n如果24小时后仍没有更新，请在确保您已支付后与我们联系。",
+									"zh-TW":"我們正在處理您的支付訂單。\n您的高級賬號剩餘天數會在24小時內自動更新；\n如果24小時后仍沒有更新，請在確保您已支付后與我們聯繫。"
+								});
+								id("btnDone3").style.pointerEvents="auto";
+								id("btnDone3").style.opacity="1";
+								orderSubmitted=new Date().getTime();
+								localStorage.setItem("orderSubmitted",orderSubmitted);
+								loadExpTime();
+							}else{
+								payState="error";
+								id("btnDone3").innerText=multilang({
+									"en-US":"Try Again",
+									"zh-CN":"重试",
+									"zh-TW":"重試"
+								});
+								id("lblPayState0").innerText=multilang({
+									"en-US":"Oops... something went wrong",
+									"zh-CN":"Oops... 出错了",
+									"zh-TW":"Oops... 出錯了"
+								});
+								id("lblPayState1").innerText=multilang({
+									"en-US":"Unable to connect to the server.",
+									"zh-CN":"无法连接至服务器。",
+									"zh-TW":"無法連接至伺服器。"
+								});
+								id("lblPayState1").innerText+=multilang({
+									"en-US":"\nPlease try again (no need to pay again)\nIf you need more help, please contact us.",
+									"zh-CN":"\n请重试（无需再次扫码付款）\n如需更多帮助，请与我们联系。",
+									"zh-TW":"\n請重試（無需再次掃碼付款）\n如需更多幫助，請與我們聯繫。"
+								});
+								id("btnDone3").style.pointerEvents="auto";
+								id("btnDone3").style.opacity="1";
+							}
+						});
+					}
+				};
+			};
+			closeMenu();
+		}
 	};
 	newItem.style.fontSize="small";
 	newItem.innerText=login.email;
