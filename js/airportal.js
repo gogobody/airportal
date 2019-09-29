@@ -1,4 +1,4 @@
-var version="19w40a2";
+var version="19w40a3";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -688,21 +688,21 @@ function loggedIn(newLogin){
 				pubPayPlan=payPlan.innerText;
 				pubPayMethod=payMethod.innerText;
 				var day=idPayPlan.replace("month","")*30;
+				switch(day){
+					case 30:
+					actualPrice=window.info.price.one.actualPrice;
+					break;
+					case 90:
+					actualPrice=window.info.price.three.actualPrice;
+					break;
+					case 360:
+					actualPrice=window.info.price.twelve.actualPrice;
+					break;
+				}
 				id("payQRC").innerHTML="";
 				var qrcode=new Image(200,200);
 				switch(idPayMethod){
 					case "wechatPay":
-					switch(day){
-						case 30:
-						actualPrice=window.info.price.one.actualPrice;
-						break;
-						case 90:
-						actualPrice=window.info.price.three.actualPrice;
-						break;
-						case 360:
-						actualPrice=window.info.price.twelve.actualPrice;
-						break;
-					}
 					fetch("https://api.rthsoftware.cn/backend/pay",getPostData({
 						"appname":appName,
 						"fee":actualPrice.substring(1)*100,
@@ -721,33 +721,17 @@ function loggedIn(newLogin){
 					switch(day){
 						case 30:
 						qrcode.src=getQRCode(window.info.price.one.alipay);
-						actualPrice=window.info.price.one.actualPrice;
 						break;
 						case 90:
 						qrcode.src=getQRCode(window.info.price.three.alipay);
-						actualPrice=window.info.price.three.actualPrice;
 						break;
 						case 360:
 						qrcode.src=getQRCode(window.info.price.twelve.alipay);
-						actualPrice=window.info.price.twelve.actualPrice;
 						break;
 					}
 					break;
 					case "paypal":
-					switch(day){
-						case 30:
-						qrcode.src=getQRCode(window.info.price.one.paypal);
-						actualPrice=window.info.price.one.actualPrice;
-						break;
-						case 90:
-						qrcode.src=getQRCode(window.info.price.three.paypal);
-						actualPrice=window.info.price.three.actualPrice;
-						break;
-						case 360:
-						qrcode.src=getQRCode(window.info.price.twelve.paypal);
-						actualPrice=window.info.price.twelve.actualPrice;
-						break;
-					}
+					qrcode.src=getQRCode("paypal://options_details_social_profile?id=MAKF55TE4NYKQ");
 					open("https://www.paypal.me/ShangzhenY/");
 					break;
 				}
