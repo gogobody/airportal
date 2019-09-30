@@ -1,4 +1,4 @@
-var version="19w40a6";
+var version="19w40a7";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -399,7 +399,7 @@ function getPostData(data){
 	};
 }
 function getQRCode(content){
-	return "https://userapi.rthsoftware.cn/shangzhenyjg9k10x4/qrcode?"+encodeData({
+	return "https://userapi.rthsoftware.cn/qrcode?"+encodeData({
 		"text":content
 	});
 }
