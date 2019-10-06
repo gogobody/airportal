@@ -1,4 +1,4 @@
-var version="19w40a7";
+var version="19w41a";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -23,7 +23,6 @@ var isTencent=/(MicroMessenger|QQ)\//i.test(navigator.userAgent);
 var orderSubmitted=localStorage.getItem("orderSubmitted");
 var settings={};
 var title=document.title;
-var tmpCode=localStorage.getItem("code");
 if(!firstRun||firstRun[version]===undefined){
 	firstRun={};
 }
@@ -325,7 +324,16 @@ function getInfo(code,password){
 						"zh-CN":"接收到文本",
 						"zh-TW":"接收到文字"
 					});
-					id("txtView").innerText=decodeURIComponent(data.text);
+					var text=decodeURIComponent(data.text);
+					if(/^[a-z]+:\/\/[a-z0-9_\-\/.#?=%]+$/i.test(text)){
+						var newA=document.createElement("a");
+						newA.href=newA.innerText=text;
+						newA.rel="nofollow";
+						newA.target="_blank";
+						id("txtView").appendChild(newA);
+					}else{
+						id("txtView").innerText=text;
+					}
 					id("btnDone4").innerText=multilang({
 						"en-US":"Close",
 						"zh-CN":"关闭",
@@ -695,10 +703,10 @@ function loggedIn(newLogin){
 				var qrcode=new Image(200,200);
 				qrcode.src="https://api.rthsoftware.cn/backend/pay?"+encodeData({
 					"appname":appName,
-					"fee":selectedPlan.specialPrice*100,
+					"fee":selectedPlan.cny*100,
 					"method":idPayMethod.toLowerCase(),
 					"username":login.username
-				})
+				});
 				id("payQRC").appendChild(qrcode);
 				if(idPayMethod=="paypal"){
 					open("https://www.paypal.me/ShangzhenY/");
@@ -1712,12 +1720,11 @@ if(isiOS){
 	});
 }
 if(parseInt($_GET["code"])>=1000&&parseInt($_GET["code"])<=999999){
-	if(isTencent){
-		tmpCode=$_GET["code"];
-	}else{
-		tmpCode=null;
-		localStorage.setItem("code",$_GET["code"]);
-		location.href="/";
+	receive.click();
+	if(id("popRecv")){
+		id("inputCode").value=$_GET["code"];
+		id("btnSub").click();
+		location.hostname&&history.replaceState(null,null,"/")
 	}
 }else if(/MSIE|Trident/i.test(navigator.userAgent)&&confirm(multilang({
 	"en-US":"Please upgrade your web browser.",
@@ -1725,16 +1732,6 @@ if(parseInt($_GET["code"])>=1000&&parseInt($_GET["code"])<=999999){
 	"zh-TW":"請升級您的網路瀏覽器。"
 }))){
 	location.href="https://www.google.cn/chrome/";
-}
-if(tmpCode){
-	localStorage.removeItem("code");
-	if(parseInt(tmpCode)){
-		receive.click();
-		if(id("popRecv")){
-			id("inputCode").value=tmpCode;
-			id("btnSub").click();
-		}
-	}
 }
 if(chs){
 	txtVer.innerText="闽ICP备18016273号";

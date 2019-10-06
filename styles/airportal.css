@@ -778,6 +778,9 @@ textarea {
 	-webkit-user-select: text;
 	user-select: text;
 }
+.contentBox a {
+	color: rgb(65,145,245);
+}
 .contentBox1 {
 	position: relative;
 	width: 60%;
