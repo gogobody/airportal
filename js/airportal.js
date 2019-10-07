@@ -1,4 +1,4 @@
-var version="19w41a";
+var version="19w41a1";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -157,7 +157,7 @@ function downloadFile(fileInfo){
 					notify(multilang({
 						"en-US":"The file is incomplete. Please upload it again.",
 						"zh-CN":"文件损坏。请重新上传。",
-						"zh-TW":"檔案損壞。請重新上傳。"
+						"zh-TW":"檔案損壞。請重新上載。"
 					}));
 					document.title=title;
 					clearInterval(intervalId);
@@ -1020,7 +1020,7 @@ function upload(up,files,config){
 				document.title="["+multilang({
 					"en-US":"Uploading",
 					"zh-CN":"正在上传",
-					"zh-TW":"正在上傳"
+					"zh-TW":"正在上載"
 				})+"] "+title;
 				showPopup([
 					'<p class="p1" id="lblUploadP"></p>',
@@ -1030,7 +1030,7 @@ function upload(up,files,config){
 				id("lblUploadP").innerText=multilang({
 					"en-US":"Uploading...",
 					"zh-CN":"正在上传……",
-					"zh-TW":"正在上傳……"
+					"zh-TW":"正在上載……"
 				});
 				window.option={
 					"url":"https://"+data.host,
@@ -1338,7 +1338,7 @@ menuItemHistory.onclick=function(){
 					window.lblPlaceholder.innerText=multilang({
 						"en-US":"You have not uploaded any files yet",
 						"zh-CN":"您尚未上传任何文件",
-						"zh-TW":"您尚未上傳任何檔案"
+						"zh-TW":"您尚未上載任何檔案"
 					});
 					if(data.length>0){
 						window.lblPlaceholder.style.display="none";
@@ -1639,7 +1639,7 @@ var uploader=new plupload.Uploader({
 			id("btnUpload").innerText=multilang({
 				"en-US":"Upload",
 				"zh-CN":"上传",
-				"zh-TW":"上傳"
+				"zh-TW":"上載"
 			});
 			id("btnUpload").onclick=function(){
 				window.chunk=1;
@@ -1676,7 +1676,7 @@ var uploader=new plupload.Uploader({
 				id("lblUploadP").innerText=multilang({
 					"en-US":"Uploading",
 					"zh-CN":"正在上传",
-					"zh-TW":"正在上傳"
+					"zh-TW":"正在上載"
 				})+" "+file.name+" "+percent+"%";
 			}
 			id("progressBar0").style.width=percent+"px";
